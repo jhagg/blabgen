@@ -1,0 +1,24 @@
+
+a:link {
+	color: black;
+}       /* unvisited link */
+a:visited {
+	color: black;
+}   /* visited links */
+a:active {
+	color: black;
+}    /* active links */
+
+.top_table {
+	width: 100%;
+	background-color: #EFEFEF;
+	border: solid #BDBDBD 1px;
+	margin-bottom: 30px;
+}
+
+.setup_table {
+	align: center;
+	background-color: #EFEFEF;
+	border: solid #BDBDBD 1px;
+}
+

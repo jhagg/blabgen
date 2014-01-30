@@ -1,0 +1,50 @@
+
+This system was originally written by Kristofer Johansson
+when he was working for Axis Communications AB
+during his summer vacation in 1997.
+
+After that no major changes has been done until I rewrote some
+code to adapt it to an inkjet instead of the original Dymo printer.
+I also rewrote the admin web page.
+
+The rest of the system is still 'AS-IS', using tcl/tk as gui interface
+and small perlprograms to interface it with the database, fetching, converting
+and printing.
+-------------------------------------------------------------------------------
+
+How it works
+
+The visitor starts by entering name, company and who to visit.
+An Axis network camera (with PTZ) is used to take a picture of the visitor, this
+is printed on the label and e-mailed to those that are visited.
+The user can adjust the cameras height and take new pictures until
+the result is satisfactory.
+
+The badge is then printed (using gimp-perl in the background) on a normal
+inkjet printer on labels in sheets. The sheets are reused, printing is done on
+only one label at a time to speed up the manual printer administration.
+
+The badge is returned to the reception when the visitor leaves and the badge
+number is entered in the system using the admin page.
+
+The reception (who manages the printer) can also view who is currently visiting the
+company from the web interface.
+
+-------------------------------------------------------------------------------
+
+At that time (1997) it was not possible to do all this in a simple way inside
+tcl/tk, that's why there are all these small perl programs.
+Today, it should be possible to integrate it all, but there
+has not been any time to do it. It works so why change it? :-)
+
+Seriously, today it would be best to rewrite the user interface
+as a web application. One other reason as to why this hasn't been
+done is security, it should not be possible to use the badge station
+to surf the internet...
+
+Once again, today it should not be a problem to do this, volunteers
+are welcome.
+
+
+
+/Jörgen Hägg

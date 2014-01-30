@@ -1,0 +1,12 @@
+#!/usr/bin/perl -p -i
+
+$sect = $1 if /^\[(\w+)\]$/;
+
+s!card!/var/cache/blabgen! if $sect eq 'default' && /^\s*qr_file\b/;
+s!card!/etc/blabgen! if $sect eq 'default' && /^\s*file\b/;
+
+s!/tmp!/var/cache/blabgen! if $sect eq 'temp' && /^\s*dir\b/;
+
+s!card!/etc/blabgen! if $sect eq 'pict' && /^\s*background\b/;
+
+

@@ -1,0 +1,45 @@
+LOCALIZATION
+===========
+
+Gettext.js is used to provide gettext support in JavaScript.
+
+Message catalogs are located in
+public/locales/<locale>/LC_MESSAGES/messages.json.
+
+Note that it is the .json files that are used by Gettext.js, and not the .po
+files. po2json is used to translate PO catalog file in messages.po to JSON
+format that is used by Gettext.js:
+
+	> po2json messages.po > messages.json
+
+Default language is English. All original message strings are defined in the
+HTML source of the UI (index.html). Translatable message strings are tagged
+using the class 'translatable' on the containing element. HTML markup is
+allowed in the message strings.
+
+When the user selects a new locale, the corresponding JSON message catalog
+is loaded via an AJAX call, and all text strings in the UI are translated
+using the loaded catalog.
+
+
+JavaScript implementation
+-------------------------
+
+The core visys object holds an instance of the current Gettext object in
+variable 'gt'. Loading a new locale is done by calling:
+
+	set_locale( locale, opts )
+
+Which will load the new translation map and update the UI and where 'locale'
+is the new locale, and 'opts' is a hash of options. If opts.initial is false,
+the UI will be blocked until the new translation map is loaded and the UI
+updated.
+
+The loading of the translation map and the updating of the UI is handled by
+two functions:
+
+	load_translation_map( locale, opts )
+	update_ui_messages()
+
+Where 'locale' is the locale to load, 'opts' is a hash of options, where
+opts.success is called on success, and opts.error on error.

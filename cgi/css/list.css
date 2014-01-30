@@ -1,0 +1,78 @@
+/* $Id: list.css,v 1.3 2006/10/04 08:18:07 jh Exp $
+ */
+
+.button_row {
+	padding-bottom: 5px;
+}
+.button_row_item {
+	background-color: #E8E8E8;
+	text-align: center;
+	width: 80px;
+	height: 20px;
+	border: solid #BDBDBD 1px;
+}
+
+.list_table {
+	width: 100%;
+	background-color: #EFEFEF;
+	border-bottom: solid #BDBDBD 1px;
+	border-top: solid #BDBDBD 1px;
+	border-right: solid #BDBDBD 1px;
+}
+
+.list_header {
+	border-left: solid #BDBDBD 1px;
+	border-bottom: solid #BDBDBD 1px;
+	text-align: left;
+	text-indent: 4px;
+}
+.list_row {
+	padding: 0;
+	border: 0;
+	margin: 0;
+}
+.list_item {
+	padding-top: 2px;
+	padding-bottom: 2px;
+	padding-left: 2px;
+	margin: 0;
+	white-space: nowrap;
+	text-indent: 2px;
+}
+.list_item1 {
+	border-top: solid #AAA3A3 1px;
+	border-left: solid #BDBDBD 1px;
+}
+.list_item2 {
+	border-top: solid #DEDEDE 1px;
+	border-left: solid #BDBDBD 1px;
+}
+.list_pict {
+	width: 70px;
+}
+.list_current_item {
+	background-color: white;
+}
+
+.header_title {
+	text-align: center;
+	font-size: 16px;
+}
+
+.header_table {
+	width: 100%;
+}
+.update_box {
+	background-color: #E8E8E8;
+	border: solid #BDBDBD 1px;
+}
+.update_item {
+	padding: 2px;
+}
+.update_upper_item {
+	border-bottom: solid #BDBDBD 1px;
+}
+.reprint {
+	text-align: right;
+	padding-right: 8px;
+}

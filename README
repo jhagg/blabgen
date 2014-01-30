@@ -1,0 +1,68 @@
+Blabgen
+=======
+
+2012-05-08
+
+A system to let visitors register their visit, take a picture of themselves and
+automatically have it printed to a visitor's badge.
+
+HOW IT WORKS
+
+Blabgen has three parts:
+
+1. Frontend (web interface) - the user interface that the visitor uses.
+2. Backend (REST style API) - communicates with database and badge printer.
+3. Admin web interface - used by reception desk.
+
+The frontend runs in a web browser (Firefox), with an attached Axis network
+camera.
+
+The visitor starts by entering name, company and who to visit. The Axis
+network camera is then used to take a picture of the visitor. The visitor can
+adjust the camera height and take new pictures until the result is satisfactory.
+
+When done, the visitor's picture, along with the name and the visiting date,
+is printed on a badge for the visitor to pick up at the reception desk,
+using a special badge printer. Also, an e-mail is sent to those that are
+visited.
+
+When the visitor leaves, the badge is returned to the reception desk, and the
+badge number is entered in the system using the admin web interface.
+
+The reception (who manages the printer) can also view who is currently
+visiting the company from the web interface.
+
+The frontend communicates with the backend over HTTP. This means a single
+backend can serve multiple frontends from a separate machine, if needed. The
+backend and frontend can also run on the same machine. All user information is
+stored in a MySQL database, user pictures are stored on the file system.
+
+The Axis network camera is accessed over the network, so it does not have to
+be connected to any specific machine.
+
+
+INSTALLATION
+
+TODO write installation instructions.
+
+
+CONFIGURATION
+
+TODO write configuration instructions.
+
+
+HISTORY
+
+This system was originally written by Kristofer Johansson when he was working
+for Axis Communications AB during his summer vacation in 1997.
+
+After that, no major changes were done until Jörgen Hägg rewrote some code to
+adapt it to an inkjet instead of the original Dymo printer.  He also rewrote
+the admin web page.
+
+By 2011 the system looked and felt out of date. The original tcl/tk user
+interface was clumsy and unattractive by modern standards. Thus, David Högberg
+was tasked to make a big overhaul. This resulted in a frontend/backend split,
+with a user interface made in HTML 5/JavaScript and a PHP backend. Also,
+Jörgen Hägg rewrote some code to print visitor cards on a dedicated badge
+printer. Functionality wise, not much was changed.

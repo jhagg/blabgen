@@ -1,0 +1,12 @@
+/debian/*.log
+/debian/*.debhelper
+/debian/blabgen-cgi/
+/debian/blabgen/
+/debian/blabgen-client/
+/debian/*.substvars
+/debian/files
+/pictures
+/pictures_tmp
+/card_pictures
+*.swp
+*.swo

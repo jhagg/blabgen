@@ -1,0 +1,55 @@
+#!/usr/bin/perl
+# require 5.003
+
+use lib '.';			# <VISITOR_LIB>
+use strict;
+use Mysql;
+use POSIX;
+use Carp;
+use Getopt::Long;
+use Blabgen::Dlog;
+use Blabgen::Common;
+use vars qw($debug $verbose);
+
+my ($cache_dir);
+my ($n_days);
+GetOptions('d+' => \$debug, 'v+' => \$verbose, 'n=i' => \$n_days);
+
+set_log('stdout' => 1);
+
+my $dbh = Mysql->connect(conf('db_host'), conf('db_db'),
+	conf('db_user'), conf('db_pwd'));
+confess($Mysql::db_errstr) unless $dbh;
+
+my $cmd = "select id, name, unix_timestamp(enter) ".
+	"from pers where to_days(now())-to_days(enter) > ".conf('max_db_age');
+my $sth = $dbh->query($cmd);
+my @delete;
+while (my @row = $sth->fetchrow()) {
+	push(@delete, [@row]);
+}
+
+for my $id (@delete) {
+	dlog(1, "delete @$id");
+	my $cmd = "delete from pers where id = $id->[0]";
+	dlog(1, $cmd);
+	$dbh->query($cmd) unless $debug;
+	my $cmd = "delete from visit where id = $id->[0]";
+	dlog(1, $cmd);
+	$dbh->query($cmd) unless $debug;
+	my $path = conf('picture_dir').
+		POSIX::strftime("/%Y-%m-%d/$id->[0].jpg", localtime($id->[2]));
+	next unless -e $path;
+	dlog(1, $path);
+	unlink($path) unless $debug;
+}
+
+my $cmd = "find ".conf('picture_dir')." -type f -mtime +".
+	conf('max_pict_age')." -name '*.jpg' | xargs rm -f ";
+dlog(1, $cmd);
+system($cmd) unless $debug;
+
+$cmd = "find ".conf('picture_dir')." -type d | ".
+	"xargs rmdir --ignore-fail-on-non-empty";
+dlog(1, $cmd);
+system($cmd) unless $debug;

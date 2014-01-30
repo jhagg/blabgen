@@ -1,0 +1,12 @@
+Template: blabgen-client/url
+Type: string
+Default: 
+Description: Server url for kiosk
+ This is the url that Firefox should start with. Must not be empty!
+
+Template: blabgen-client/proxy
+Type: string
+Default: 
+Description: proxy url for kiosk
+ This is the proxy url for the browser. Set it empty
+ if proxy isn't needed. (Blabgen normally doesn't need a proxy.)

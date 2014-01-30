@@ -1,0 +1,9 @@
+#!/usr/bin/perl -i
+
+
+while(<>) {
+	next if /<REMOVE_THIS>/;
+
+	print;
+}
+

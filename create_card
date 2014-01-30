@@ -1,0 +1,201 @@
+#!/usr/bin/perl
+
+use strict;
+use POSIX;
+use Getopt::Long;
+use Imager;
+use File::Temp;
+use Encode;
+use Config::IniFiles;
+
+use vars qw($verbose $debug);
+binmode(STDOUT, ':utf8');
+
+#set_log(-logmode => 0666, 'logfile' => conf('logfile'), -stdout => 0);
+
+############################################################
+my $label_nr = 0;
+my ($company, $print_file, $name, $date, $pict_file, $output_file,
+	$show_pict, $no_utf8);
+my $config = '/etc/blabgen/card.ini';
+$config = 'conf/card.ini' if -r 'conf/card.ini'; # for debug
+
+GetOptions('v+' => \$verbose, 'd+' => \$debug,
+	'pict=s'	=> \$pict_file,
+	'name:s'	=> \$name,
+	'comp:s'	=> \$company,
+	'nr=i'		=> \$label_nr,
+	'date=s'	=> \$date,
+	'printer=s'	=> \$print_file,
+	'show'		=> \$show_pict,
+	'o=s'		=> \$output_file);
+
+my $config_obj = new Config::IniFiles(-file => $config);
+
+$name = decode('UTF-8', $name);
+# create temp file (removed automatically)
+my $tmp_obj;
+unless ($output_file) {
+	$tmp_obj = new File::Temp(DIR => cnf('temp.dir'),
+		TEMPLATE => cnf('temp.template'),
+		SUFFIX => cnf('temp.suffix'));
+	$output_file = $tmp_obj->filename;
+}
+
+$pict_file = cnf('default.file') unless $pict_file;
+my $qr_file = cnf('default.qr_file');
+$company = cnf('debug.company') unless defined $company;
+$name = cnf('debug.name') unless defined $name;
+$label_nr = cnf('debug.nr') unless $label_nr;
+
+$label_nr = sprintf('%06d', $label_nr);
+$date = POSIX::strftime("%F", localtime) unless $date;
+
+my $fontf	= cnf('card.font');
+my $card_w	= tpx(cnf('card.width'));	# width in mm
+my $card_h	= tpx(cnf('card.height'));	# height in mm
+
+my $pic_y	= tpx(cnf('pict.y_off'));	# pict y-offset
+my $pic_h	= tpx(cnf('pict.height'));	# pict height
+my $pic_w	= $pic_h*.75;			# pict width
+my $pic_x	= ($card_w-$pic_w)/2;		# pict x-offset
+
+my $crop_w	= cnf('pict.crop_width');	# crop width in %
+
+my $txt_x	= tpx(cnf('text.x_off'));	# text x-offset
+my $txt_w	= $card_w-$txt_x*2;		# text width
+my $qr_w	= tpx(cnf('qr.width'));		# qr width
+my $num_size	= cnf('text.num_size');		# size of number font
+my $date_size	= cnf('text.date_size');	# size of number font
+my $text_max	= cnf('text.max');		# max size of text
+my $valid_size	= cnf('text.valid_size');	# size of 'valid until'
+
+my $line_sep	= tpx(cnf('text.line_sep'));	# y-space to text
+my $line_sep2	= tpx(cnf('text.line_sep2'));	# y-space to text
+
+my $back_file	= cnf('pict.background');	# background picture
+
+my $img = new Imager;
+my $curr_y = $pic_y;
+
+# read background image
+$img->read(file => $back_file) || die $img->errstr;
+
+# add picture
+die "no background file" unless -r $pict_file;
+my $pict = new Imager(file => $pict_file) || die Imager->errstr;
+# crop width
+if ($crop_w) {
+	my $cr_pix = int($pict->getwidth*$crop_w/100);
+	$pict = $pict->crop(width => $cr_pix);
+}
+# scale to 4:3
+$pict = $pict->scaleX(pixels => $pic_w)->scaleY(pixels => $pic_h);
+$img->paste(left => $pic_x, top => $curr_y, img => $pict);
+
+$curr_y += $pict->getheight;
+
+# select font
+my $font = new Imager::Font(file => $fontf, utf8 => 1,
+	color => cnf('font.default'), aa => 1) || die Imager->errstr;
+my $fontr = new Imager::Font(file => $fontf, utf8 => 1,
+	color => cnf('font.date'), aa => 1) || die Imager->errstr;
+my $fontg = new Imager::Font(file => $fontf, utf8 => 1,
+	color => cnf('font.number'), aa => 1) || die Imager->errstr;
+
+# print name
+my ($nsize, $nwidth, $nheight, $bheight) = find_size($font, $name, $txt_w);
+my $name_x = ($card_w-$nwidth)/2;
+$img->string(x => $name_x, y => $curr_y+$line_sep+$bheight, size => $nsize,
+	string => $name, font => $font);
+$curr_y += $line_sep+$nheight;
+
+# print company
+my ($nsize, $nwidth, $nheight, $bheight) =
+	find_size($font, $company, $txt_w, $nsize-cnf('text.diff'));
+my $name_x = ($card_w-$nwidth)/2;
+$img->string(x => $name_x, y => $curr_y+$line_sep+$bheight, size => $nsize,
+	string => $company, font => $font);
+$curr_y += $line_sep+$nheight;
+
+
+# print number
+my @bbx = $fontg->bounding_box(size => $num_size, string => $name);
+my $num_y = $card_h-$line_sep2+$bbx[4];
+$img->string(x => $txt_x, y => $num_y, size => $num_size,
+	string => $label_nr, font => $fontg);
+$num_y -= $bbx[5];
+
+# print date
+my @bbx = $fontr->bounding_box(size => $date_size, string => $date);
+$num_y -= $line_sep+$bbx[4];
+$img->string(x => $txt_x, y => $num_y, size => $date_size,
+	string => $date, font => $fontr);
+$num_y -= $bbx[5];
+
+# print valid
+my $str = cnf('string.valid');
+my @bbx = $fontr->bounding_box(size => $str, string => $date);
+$num_y -= $line_sep2+$bbx[4];
+$img->string(x => $txt_x, y => $num_y, size => $valid_size,
+	string => $str, font => $fontr);
+
+# encode number
+open(QR, "|qrencode -o $qr_file");
+print QR "$label_nr\n";
+close QR;
+
+# add QR-code
+my $qr = new Imager(file => $qr_file) || die Imager->errstr;
+$qr = $qr->scale(xpixels => $qr_w);
+my $qr_x = $img->getwidth-$qr->getwidth-tpx(1);
+my $qr_y = $img->getheight-$qr->getheight-tpx(1);
+$img->paste(left => $qr_x, top => $qr_y, img => $qr);
+
+# write final file
+
+$img->write(file => $output_file) || die $img->errstr;
+
+(my $ps_file = $output_file) =~ s/\.png$/.ps/;
+system("convert $output_file $ps_file");
+system("lp -d $print_file $ps_file") if !$debug && $print_file;
+exit 0;
+######################################################################
+sub find_size {
+	my $font = shift;
+	my $name = shift;
+	my $width = shift;
+	my $maxs = shift;
+
+
+	my $size = cnf('text.min');
+	my $w;
+	my $oldsize;
+	my @bbx;
+	while (1) {
+		@bbx = $font->bounding_box(size => $size, string => $name);
+		$w = $bbx[2]-$bbx[0];
+		last if $maxs && $size >= $maxs;
+		last if $w > $width;
+		$oldsize = $size;
+		$size++;
+		last if $size > $text_max;
+	}
+	($size, $w, $bbx[5]-$bbx[4], $bbx[5]);
+}
+
+sub tpx {
+	my $mm = shift;
+
+	my $c_fact = 300/25.4;		# conversion to pixels
+	int($mm*$c_fact);
+}
+
+sub cnf {
+	my $id = shift;
+
+	my ($sect, $key) = split(/\./, $id);
+	my $v = $config_obj->val($sect, $key);
+	print "$id = '$v'\n" if $verbose;
+	$v;
+}

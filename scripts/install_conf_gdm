@@ -1,0 +1,17 @@
+#!/usr/bin/perl -i
+
+
+while(<>) {
+	my $state = 1 if /^\[daemon\]/;
+	next if /^TimedLogin/;
+
+	print;
+
+	if ($state) {
+		print "TimedLoginEnable=true\n",
+			"TimedLogin=blabgen\n",
+			"TimedLoginDelay=0\n";
+		$state = 0;
+	}
+}
+

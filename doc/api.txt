@@ -1,0 +1,113 @@
+API
+
+Get employees.
+Post new visits.
+
+GET /employees.php
+
+	Get names and usernames of employees.
+
+	PARAMS
+
+		limit			Max number of employees to get. Optional
+		offset		Offset. Optional.
+		order_by	'uname', 'first_name', 'last_name'. Optional.
+		order			'asc' or 'desc'. Optional.
+
+	RESPONSE(S)
+
+		HTTP/1.1 200 OK
+		Content-Type: application/json
+
+		[
+			{
+				username: {username},
+				first_name: {first name},
+				last_name: {last name}
+			}
+		]
+
+		HTTP/1.1 405 Method Not Allowed
+		Content-Type: text/html
+
+		Only GET allowed.
+
+
+POST /cam_movement.php
+
+	Moving camera up/down.
+
+	PARAMS
+
+		value		string '({x}, {y})' where {x} and {y} are x and y offsets.
+
+	RESPONSE(S)
+
+		HTTP/1.1 200 OK
+
+		{Empty body}.
+
+		HTTP/1.1 400 Bad Request
+
+		{Error message}
+
+		HTTP/1.1 405 Method Not Allowed
+
+		Only POST allowed.
+
+
+POST /pictures.php
+
+	Takes picture.
+
+	PARAMS
+
+		None.
+
+	RESPONSE(S)
+
+		HTTP/1.1 200 OK
+		Location: {URL of taken picture}
+
+		HTTP/1.1 405 Method Not Allowed
+
+		HTTP/1.1 500 Internal Server Error
+
+		{Error message}
+	
+
+POST /visits.php
+
+	Register a new visit in the system and prints a visitor badge.
+
+	PARAMS
+
+		name			The name of the visitor. Required.
+		org				The name of the organization which the visitor is representing. Not required.
+		receiver	The username of the employee(s) which the user is visiting. Required.
+		end_date	The last date of the visit. Required.
+		picture		The picture the user took. Required.
+
+	RESPONSE(S)
+
+		HTTP/1.1 200 OK
+		Content-Type: text/html
+
+		{Empty body}
+
+		HTTP/1.1 400 Bad Request
+		Content-Type: application/json
+
+		{
+			errmsg: <error message>
+		}
+
+		HTTP/1.1 405 Method Not Allowed
+		Content-Type: application/json
+
+		Only POST allowed.
+
+		HTTP/1.1 500 Internal Server Error
+		Content-Type: text/html
+		
+		{Error message}.

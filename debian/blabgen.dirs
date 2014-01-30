@@ -1,0 +1,4 @@
+/var/log/blabgen
+/var/log/blabgen/cgi
+/var/cache/blabgen
+/etc/blabgen

@@ -1,0 +1,13 @@
+#!/usr/bin/perl 
+
+
+while(<>) {
+	if (my ($line) = /^XKBOPTIONS="([^"]+)"/) {
+		my @opt = split(/,/, $line);
+		push(@opt, 'terminate:ctrl_alt_bksp')
+			unless grep($_ eq 'terminate:ctrl_alt_bksp', @opt);
+		$_ = 'XKBOPTIONS="'.join(',', @opt).'"';
+	}
+	print;
+}
+

@@ -1,0 +1,8 @@
+#!/usr/bin/perl -p -i
+
+$sect = $1 if /^\[(\w+)\]$/;
+
+s!\.\./\.\.!/var/cache/blabgen! if $sect eq 'picture'
+	&& /^(card_|)picture_(tmp_dir|dir|url_template)\b/;
+s!\.\./\.\.!/usr/share/blabgen! if $sect eq 'printing'
+	&& /^print_badge_cmd\b/;

@@ -1,0 +1,29 @@
+blabgen (3.4-1) unstable; urgency=low
+
+  * first version released 
+
+ -- Jörgen Hägg <jh@axis.com>  Tue, 22 May 2012 17:24:31 +0200
+
+blabgen (3.3-2) unstable; urgency=low
+
+  * gdm config added
+
+ -- Jörgen Hägg <jh@axis.com>  Tue, 22 May 2012 13:17:35 +0200
+
+blabgen (3.3-1) unstable; urgency=low
+
+  * proxy rules fixed
+
+ -- Jörgen Hägg <jh@axis.com>  Tue, 22 May 2012 10:14:55 +0200
+
+blabgen (3.2-1) unstable; urgency=low
+
+  * Release version
+
+ -- Jörgen Hägg <jh@axis.com>  Mon, 21 May 2012 12:12:20 +0200
+
+blabgen (3.1-1) unstable; urgency=low
+
+  * Initial release
+
+ -- Jörgen Hägg <jh@axis.com>  Fri, 29 Jun 2007 21:14:02 +0200
