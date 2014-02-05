@@ -23,6 +23,7 @@ function save_visit($visit_data ) {
 	$insert_data = array(
 		'name' => $visit_data['name'],
 		'company' => $visit_data['company'],
+		'parking' => $visit_data['parking'],
 		// use $_SERVER instead of gethostname() to support virtual
 		// hosts
 		'srvhost' => $_SERVER['SERVER_NAME'],
@@ -64,18 +65,20 @@ function save_visit($visit_data ) {
 		implode('; ', $insert_data ).' ...');
 
 	$sql = "INSERT INTO pers
-		(name, company, enter_time, leave_time, webhost, webkey)
-		VALUES (?, ?, ?, ?, ?, ?)";
+		(name, company, enter_time, leave_time,
+			webhost, webkey, parking)
+		VALUES (?, ?, ?, ?, ?, ?, ?)";
 
 	$stmt = $db->prepare($sql);
 	if (!$stmt ) {
 		throw new Http_error(500, 'DB error');
 	}
 
-	$stmt->bind_param('ssssss',
+	$stmt->bind_param('sssssss',
 		$insert_data['name'], $insert_data['company'],
 		$insert_data['enter_time'], $insert_data['leave_time'],
-		$insert_data['webhost'], $insert_data['webkey']);
+		$insert_data['webhost'], $insert_data['webkey'],
+		$insert_data['parking']);
 	
 	if (!$stmt->execute()) {
 		throw new Http_error(500, 'DB error');
@@ -198,6 +201,7 @@ function validate_visit_data($visit_data ) {
 		'name' => $name,
 		// company is not required
 		'company' => @$_POST['company'],
+		'parking' => $parking,
 		'start_date' => $start_date,
 		'end_date' => $end_date,
 		'receivers' => $receivers,
@@ -252,7 +256,7 @@ function send_visitor_email($visit_data, $receivers ) {
 		$visit_data['srvhost'], $visit_data['webkey']);
 
 	foreach ($receivers as $r ) {
-		$tos[] = $r['uname'].'@axis.com';
+		$tos[] = $r['uname'].'@'.conf('receiver_mail_domain');
 	}
 
 	if (conf('mode') == 'development' ) {
