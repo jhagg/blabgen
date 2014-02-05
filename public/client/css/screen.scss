@@ -286,14 +286,22 @@ section.main {
 	line-height: 1.35;
 	margin-top: 180px;
 }
-	
-label, .label {
-	margin-top: 220px;
+
+.label {
+	margin-top: 160px;
 	margin-bottom: 30px;
 	font-size: 30px;
 	font-family: rotis_bold;
 	display: block;
 }
+.label2 {
+	margin-top: 20px;
+	margin-bottom: 30px;
+	font-size: 30px;
+	font-family: rotis_bold;
+	display: block;
+}
+
 input[type=text] {
 	font-size: 42px;
 	font-family: rotis_xbold;
