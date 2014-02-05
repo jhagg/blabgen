@@ -8,10 +8,10 @@ $video_feed_url = conf('cam_video_url');
 	<meta charset="utf-8">
 	<title>Start</title>
 
-	<script src="js/jquery-1.6.1.min.js"></script>
-	<script src="js/jquery-ui-1.8.13.custom.min.js"></script>
-	<script src="js/jquery.searchabledropdown-1.0.7.min.js"></script>
-	<script src="js/jquery.blockUI.js"></script>
+	<script src="js/jquery-1.10.2.min.js"></script>
+	<script src="js/jquery-ui-1.10.3.custom.min.js"></script>
+	<script src="js/jquery.searchabledropdown-1.0.8.min.js"></script>
+	<script src="js/jquery.blockUI-2.66.0.js"></script>
 
 	<script src="js/gettext.js"></script>
 	<script src="js/core.js"></script>
@@ -116,7 +116,7 @@ endif;
 		<section class="main screen-name">
 			<form action="#">
 				<div>
-					<label for="data-name" id="data-name-label" class="translatable">
+					<label for="data-name" id="data-name-label" class="label translatable">
 							Your name
 					</label>
 					<input id="data-name" type="text" name="name" value=""/>
@@ -128,10 +128,16 @@ endif;
 		<section class="main screen-company">
 			<form action="#">
 				<div>
-					<label for="data-company" class="translatable">
+					<label for="data-company" class="label translatable">
 						Your company (or leave blank)
 					</label>
 					<input id="data-company" type="text" name="company" value=""/>
+				</div>
+				<div>
+					<label for="data-parking" class="label2 translatable">
+						Your parking (or leave blank)
+					</label>
+					<input id="data-parking" type="text" name="parking" value=""/>
 				</div>
 			</form>
 		</section>
@@ -205,7 +211,7 @@ endif;
 
 		<section class="main screen-receiver">
 			<form action="#" id="receiver-f">
-				<label class="translatable">
+				<label class="label translatable">
 					Your Axis host
 				</label>
 				<div class="receiver-filter-w">

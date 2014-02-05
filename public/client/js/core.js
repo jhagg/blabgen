@@ -68,6 +68,7 @@ var visys = {};
 		try {
 			run.apply( this, args );
 		} catch ( err ) {
+			log(err);
 		} finally {
 			log( 'Done processing event ...' );
 			processing_event = false;
@@ -156,7 +157,8 @@ var visys = {};
 	/** Month names for UI. */
 	conf.month_names = [
 			'Januari', 'Februari', 'Mars', 'April', 'Maj', 'Juni',
-			'Juli', 'Augusti', 'September', 'Oktober', 'November', 'December'
+			'Juli', 'Augusti', 'September', 'Oktober', 'November',
+			'December'
 		];
 
 	/** Default locale. */
@@ -166,8 +168,9 @@ var visys = {};
 	var empty_user_data = {
 		name: null,
 		company: null,
+		parking: null,
 		receiver: null,
-		end_date: null,//(new Date()).getTime(),
+		end_date: (new Date()),
 		picture_url: null
 	}
 
@@ -187,6 +190,7 @@ var visys = {};
 		log( 'Resetting state and emptying data structs ...' );
 		$('#data-name').val('');
 		$('#data-company').val('');
+		$('#data-parking').val('');
 		$('#data-receiver').val('');
 		$('#data-receiver-filter').val('');
 
@@ -240,7 +244,8 @@ var visys = {};
 
 	/** Error. */
 	root.bind( 'error', '*', 'error', function () {
-		// always unblock if an error occured. if wasn't blocked, no harm done.
+		// always unblock if an error occured. if wasn't blocked, no
+		// harm done.
 		root.unblockUI();
 		root.goto('error');
 	});
@@ -375,6 +380,7 @@ var visys = {};
 	/** 'company' -> 'date' */
 	root.bind( 'next', 'company', 'date', function () {
 		user_data.company = $('#data-company').val();
+		user_data.parking = $('#data-parking').val();
 		root.goto('date', 'company');
 	});
 
@@ -701,7 +707,8 @@ var visys = {};
 					log( 'Picture taken (' + url + ')!' );
 
 					// show picture
-					$('#picture-img').data('video-src', $('#picture-img').attr('src') );
+					$('#picture-img').data('video-src',
+						$('#picture-img').attr('src') );
 					$('#picture-img').attr('src', url );
 
 					user_data.picture_url = url;
@@ -759,9 +766,9 @@ var visys = {};
 
 		var start_date = new Date();
 		// sanity check, might happen if 00:00 is passed while the user
-		// is registering, and the user chose what is now yesterday as the end date.
-		// in that case, start_date will be set to equal end_date. this is very
-		// unlikely to happen.
+		// is registering, and the user chose what is now yesterday as
+		// the end date.  in that case, start_date will be set to equal
+		// end_date. this is very unlikely to happen.
 		if ( start_date.getTime() > user_data.end_date.getTime() ) {
 			start_date = user_data.end_date;
 		}
@@ -769,6 +776,7 @@ var visys = {};
 		var data = {
 			name: user_data.name,
 			company: user_data.company,
+			parking: user_data.parking,
 			start_date: start_date.getTime(),
 			end_date: user_data.end_date.getTime(),
 			receivers: user_data.receiver,
