@@ -8,14 +8,9 @@ $video_feed_url = conf('cam_video_url');
 	<meta charset="utf-8">
 	<title>Start</title>
 
-	<script src="js/jquery-1.10.2.min.js"></script>
-	<script src="js/jquery-ui-1.10.3.custom.min.js"></script>
-	<script src="js/jquery.searchabledropdown-1.0.8.min.js"></script>
-	<script src="js/jquery.blockUI-2.66.0.js"></script>
-
-	<script src="js/gettext.js"></script>
-	<script src="js/core.js"></script>
-
+	<link rel="stylesheet" href="chosen/docsupport/style.css" />
+	<link rel="stylesheet" href="chosen/docsupport/prism.css" />
+	<link rel="stylesheet" href="chosen/chosen.css" />
 	<link rel="stylesheet" href="css/screen.css" />
 	<style type="text/css" media="screen">
 <?php
@@ -214,10 +209,6 @@ endif;
 				<label class="label translatable">
 					Your Axis host
 				</label>
-				<div class="receiver-filter-w">
-					<label for="data-receiver-filter"></label>
-					<input type="text" class='translatable' id="data-receiver-filter" name="receiver-filter" data-translate='attr:placeholder' placeholder="Enter text to search ..."/>
-				</div>
 				<div class="receiver-w">
 					<span id="none-match" style="display: none;" class="translatable">
 						No matches.
@@ -397,6 +388,18 @@ endif;
 
 </div>
 <!-- / doc -->
+
+
+<script src="js/jquery-1.10.2.min.js"></script>
+<script src="js/jquery-ui-1.10.3.custom.min.js"></script>
+<script src="js/jquery.blockUI-2.66.0.js"></script>
+
+<script src="chosen/chosen.jquery.min.js"></script>
+<script src="chosen/docsupport/prism.js"></script>
+<script src="js/chosen_config.js"></script>
+
+<script src="js/gettext.js"></script>
+<script src="js/core.js"></script>
 
 </body>
 </html>

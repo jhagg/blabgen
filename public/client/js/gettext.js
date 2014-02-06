@@ -1,3 +1,4 @@
+$(document).ready(function(){
 /*
 Pure Javascript implementation of Uniforum message translation.
 Copyright (C) 2008 Joshua I. Miller <unrtst@cpan.org>, all rights reserved
@@ -1263,3 +1264,4 @@ Copyright (C) 2008, Joshua I. Miller E<lt>unrtst@cpan.orgE<gt>, all rights reser
 
 */
 
+});

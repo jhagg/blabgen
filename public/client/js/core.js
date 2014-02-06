@@ -1,6 +1,7 @@
 /**
  * Visitor system core.
  */
+$(document).ready(function(){
 
 // global blabgen namespace root
 var visys = {};
@@ -192,7 +193,6 @@ var visys = {};
 		$('#data-company').val('');
 		$('#data-parking').val('');
 		$('#data-receiver').val('');
-		$('#data-receiver-filter').val('');
 
 		visited_screens = {};
 		current_screen = null;
@@ -515,7 +515,8 @@ var visys = {};
 				s.find('option').remove();
 				// sort by first and last name, alphanumerically
 				employees.sort( function ( a, b ) {
-					return ( a.first_name < b.first_name ) ? -1 : 
+					return
+					( a.first_name < b.first_name ) ? -1 : 
 					( a.first_name > b.first_name ) ? 1 :
 					( a.last_name < b.last_name ) ? -1 :
 					( a.last_name > b.last_name ) ? 1 : 0;
@@ -524,29 +525,13 @@ var visys = {};
 					if ( !value.last_name ) {
 						value.last_name = '';
 					}
-					var o = $('<option>' + value.first_name + ' ' + value.last_name  + '</option>');
+					var o = $('<option>'+value.first_name+
+						' '+value.last_name+
+						'</option>');
 					o.attr('value', value.username);
 					s.append( o );
 				});
-			});
-
-			// filter input by simply showing/hiding matching names
-			$('#data-receiver-filter').keyup( function () {
-				var c = 0;
-				$('#none-match').hide();
-				// search is case INsensitive
-				var r = new RegExp( $(this).val(), 'i' );
-				s.find('option').filter( function ( i ) {
-					if ( $(this).text().match( r ) ) {
-						$(this).show();
-						c++;
-					} else {
-						$(this).hide();
-					}
-				});
-				if ( !c ) {
-					$('#none-match').show();
-				}
+				s.trigger('chosen:updated');
 			});
 
 			// when selected, user is allowed to continue
@@ -606,7 +591,7 @@ var visys = {};
 		// this is just as ugly as the name and company focusing, see
 		// further comments there
 		setTimeout( function () {
-			$('#data-receiver-filter').focus();
+			$('#data-receiver').trigger('chosen:open');
 		}, 600 );
 
 		// enter = to photo screen
@@ -1274,3 +1259,4 @@ var visys = {};
 		visys.trigger('init');
 	});
 })( visys, console.log, jQuery );
+});
