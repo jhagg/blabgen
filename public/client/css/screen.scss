@@ -307,7 +307,7 @@ input[type=text] {
 	font-family: rotis_xbold;
 	border-width: 17px;
 	background: transparent;
-	-moz-border-image: url(images/input-white.png) 17 / 17px stretch stretch;
+	-moz-border-image: url(images/input-white.png) 17/17px stretch stretch;
 	width: 660px;
 }
 
@@ -407,45 +407,84 @@ input[type=text] {
 /**
  * Receiver page.
  */
-	.screen-receiver {
-		text-align: left;
-	}
-	.screen-receiver label {
-		margin: 0;
-		text-align: center;
-	}
-	.screen-receiver input {
-		font-size: 18px;
-		font-family: rotis_xbold;
-		border-width: 17px;
-		background: transparent;
-		-moz-border-image: url(images/input-white.png) 17 / 17px stretch stretch;
-		width: 300px;
-	}
-	.screen-receiver form {
+.screen-receiver {
+/*	text-align: left; */
+}
+/*
+.screen-receiver label {
+	margin: 0;
+	text-align: center;
+}
+.screen-receiver input {
+	font-size: 18px;
+	font-family: rotis_xbold;
+	border-width: 17px;
+	background: transparent;
+	-moz-border-image: url(images/input-white.png) 17 / 17px stretch stretch;
+	width: 300px;
+}
+.screen-receiver form {
 		position: absolute;
 		top: 0;
 		left: 100px;
 		width: 812px;
 		text-align: left;
-	}
-	.receiver-filter-w label {
-		display: none;
-		margin-top: 0;
-		margin-bottom: 0;
-		text-align: left;
-	}
-	#data-receiver {
+
+}
+
+.receiver-filter-w label {
+	display: none;
+	margin-top: 0;
+	margin-bottom: 0;
+	text-align: left;
+}
+#data-receiver option {
 		display: block;
 		width: 318px;
 		margin-left: 8px;
-		height: 370px;
-	}
-	#none-match {
-		margin: 4px 8px 8px 8px;
-		display: block;
-	}
+}
+#none-match {
+	margin: 4px 8px 8px 8px;
+	display: block;
+}
+*/
+.receiver-drop {
+	font-size: 22px;
+	line-height: 25px;
+	font-family: rotis;
+}
+.receiver-cont {
+	display: block;
+	width: 318px;
+	font-size: 20px;
+	font-family: rotis;
+/*
 
+	border-width: 17px;
+	background: transparent; 
+	-moz-border-image: url(images/input-white.png) 17/17px stretch stretch;
+*/
+}
+
+.receiver-choice {
+	font-family: rotis;
+	margin-top: 5px;
+	font-size: 25px;
+	line-height: 25px;
+	color: #404040;
+}
+.receiver-w {
+	display: block;
+	margin-left: 35%;
+	width: 100px;
+}
+.select2-choices {
+	/*background: red !important; */
+	background: transparent !important; 
+
+	border-width: 10px !important;
+	border-image: url(images/input-white.png) 10/10px stretch stretch !important;
+}
 /**
  * Photo page.
  */

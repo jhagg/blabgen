@@ -8,9 +8,7 @@ $video_feed_url = conf('cam_video_url');
 	<meta charset="utf-8">
 	<title>Start</title>
 
-	<link rel="stylesheet" href="chosen/docsupport/style.css" />
-	<link rel="stylesheet" href="chosen/docsupport/prism.css" />
-	<link rel="stylesheet" href="chosen/chosen.css" />
+	<link rel="stylesheet" href="select2/select2.css" />
 	<link rel="stylesheet" href="css/screen.css" />
 	<style type="text/css" media="screen">
 <?php
@@ -213,7 +211,9 @@ endif;
 					<span id="none-match" style="display: none;" class="translatable">
 						No matches.
 					</span>
-					<select multiple size="25" id="data-receiver" name="receiver">
+					<select multiple size="25"
+						id="data-receiver"
+						name="receiver">
 					</select>
 				</div>
 			</form>
@@ -394,9 +394,9 @@ endif;
 <script src="js/jquery-ui-1.10.3.custom.min.js"></script>
 <script src="js/jquery.blockUI-2.66.0.js"></script>
 
-<script src="chosen/chosen.jquery.min.js"></script>
-<script src="chosen/docsupport/prism.js"></script>
-<script src="js/chosen_config.js"></script>
+<script src="select2/select2.js"></script>
+<!-- script src="select2/select2_locale_sv.js"></script --!>
+<script src="js/select_config.js"></script>
 
 <script src="js/gettext.js"></script>
 <script src="js/core.js"></script>

@@ -363,9 +363,7 @@ var visys = {};
 			var kc = e.keyCode ? e.keyCode : e.which;
 			log( 'keypress: ' + kc + ' ...' );
 			if ( kc == 13 ) {
-				//if ( $('#data-company').val() ) {
-					root.trigger('next');
-				//}
+				root.trigger('next');
 				return false;
 			}
 		});
@@ -510,17 +508,9 @@ var visys = {};
 		if ( !root.visited('receiver') ) {
 			s = $('#data-receiver');
 
+			s.select2('val', '');
 			// list of employees is dynamic
 			get_employees( function ( employees ) {
-				s.find('option').remove();
-				// sort by first and last name, alphanumerically
-				employees.sort( function ( a, b ) {
-					return
-					( a.first_name < b.first_name ) ? -1 : 
-					( a.first_name > b.first_name ) ? 1 :
-					( a.last_name < b.last_name ) ? -1 :
-					( a.last_name > b.last_name ) ? 1 : 0;
-				});
 				$.each( employees, function ( key, value ) {
 					if ( !value.last_name ) {
 						value.last_name = '';
@@ -529,9 +519,8 @@ var visys = {};
 						' '+value.last_name+
 						'</option>');
 					o.attr('value', value.username);
-					s.append( o );
+					s.append(o);
 				});
-				s.trigger('chosen:updated');
 			});
 
 			// when selected, user is allowed to continue
@@ -591,7 +580,7 @@ var visys = {};
 		// this is just as ugly as the name and company focusing, see
 		// further comments there
 		setTimeout( function () {
-			$('#data-receiver').trigger('chosen:open');
+			$('.receiver-w input').focus();
 		}, 600 );
 
 		// enter = to photo screen
