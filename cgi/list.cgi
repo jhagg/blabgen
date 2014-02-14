@@ -96,6 +96,41 @@ if ($cgi->param('find')) {
 $cgi->param('date', $date_str);
 
 ######################################################################
+if ($cgi->param('emerg')) {
+	print start_table({-cellspacing => 0, -cellpadding => 0,
+		'class' => 'header_table', -width => '100%'}), "\n";
+	print Tr(
+		td({-align => 'left'}),
+		th({-class => 'header_title'},
+			"Active visitors $date_str")."\n",
+		td({-align => 'right'})), "\n";
+	print end_table(), "\n";
+
+	print emerg_table($date_str, $curr_id, @show_date);
+
+	print end_form();
+	print end_html(), "\n";
+	exit 0;
+}
+
+######################################################################
+if ($cgi->param('park')) {
+	print start_table({-cellspacing => 0, -cellpadding => 0,
+		'class' => 'header_table', -width => '100%'}), "\n";
+	print Tr(
+		td({-align => 'left'}),
+		th({-class => 'header_title'},
+			"Current visitors license plates $date_str")."\n",
+		td({-align => 'right'})), "\n";
+	print end_table(), "\n";
+
+	print parking_table($date_str, $curr_id, @show_date);
+
+	print end_html(), "\n";
+	exit 0;
+}
+
+######################################################################
 print start_table({-cellspacing => 0, -cellpadding => 0,
 	'class' => 'header_table', -width => '100%'}), "\n";
 print start_form();
@@ -112,27 +147,43 @@ print end_html(), "\n";
 exit 0;
 ######################################################################
 sub button_row {
-	
+
+	my @buttons = (
+		[
+			['EMERGENCY', $cgi->url.'?emerg=1', 1],
+			['Today', $cgi->url],
+			['This year', $cgi->url],
+		],
+		[
+			['Parking', $cgi->url.'?park=1', 1],
+			['Prev day', gen_url('dday=-1')],
+			['Next day', gen_url('dday=1')],
+		],
+		[
+			[],
+			['Prev week', gen_url('dweek=-1')],
+			['Next week', gen_url('dweek=1')],
+		],
+		[
+			[],
+			['Prev month', gen_url('dmonth=-1')],
+			['Next month', gen_url('dmonth=1')],
+		],
+	);
+
 	my $s = start_table({-cellspacing => 0, -cellpadding => 0,
 		'class' => 'button_row'});
-	$s .= Tr(td({-class => 'button_row_item'},
-		a({-href => $cgi->url}, 'Today'))."\n".
-		td({-class => 'button_row_item'},
-		a({-href => gen_url('year=1')}, 'This year')))."\n";
-	$s .= Tr(td({-class => 'button_row_item'},
-		a({-href => gen_url('dday=-1')}, 'Prev day'))."\n".
-		td({-class => 'button_row_item'},
-		a({-href => gen_url('dday=1')}, 'Next day')))."\n";
+	for my $i (@buttons) {
+		my @brow;
+		for my $j (@$i) {
+			push(@brow, td({-class => 'button_row_item'},
+				$j->[2] ?  a({-href => $j->[1],
+					-target => '_blank'}, $j->[0]) :
+				 a({-href => $j->[1]}, $j->[0]))."\n");
+		}
+		$s .= Tr(@brow);
+	}
 
-	$s .= Tr(td({-class => 'button_row_item'},
-		a({-href => gen_url('dweek=-1')}, 'Prev week'))."\n".
-		td({-class => 'button_row_item'},
-		a({-href => gen_url('dweek=1')}, 'Next week')))."\n";
-
-	$s .= Tr(td({-class => 'button_row_item'},
-		a({-href => gen_url('dmonth=-1')}, 'Prev month'))."\n".
-		td({-class => 'button_row_item'},
-		a({-href => gen_url('dmonth=1')}, 'Next month')))."\n";
 	$s .= end_table();
 	$s;
 }
@@ -175,7 +226,7 @@ sub date_table {
 	# Choose the order of the table:
 	my @plh;
 	my $cmd = "select id, name, company, enter_time, leave_time, ".
-		"webkey, status from pers ";
+		"webkey, status, parking from pers ";
 #	$cmd .= "join visit using(id) " if $search_user;
 	unless (defined $date[1]) {
 		$cmd .= "where enter_time between ? and ?";
@@ -205,8 +256,8 @@ sub date_table {
 		'',
 		a({-href => $myurl.'?sort=company'}, 'Company')."\n",
 		a({-href => $myurl.'?sort=leave_time'}, 'Leave')."\n",
-		'&nbsp;', '&nbsp;']))."\n";
-	while (my ($id, $name, $comp, $enter, $leave, $wkey, $status)
+		'Parking', '&nbsp;']))."\n";
+	while (my ($id, $name, $comp, $enter, $leave, $wkey, $status, $parking)
 			= $sth->fetchrow_array) {
 
 		my $date = substr($enter, 0, 10);
@@ -240,8 +291,8 @@ sub date_table {
 		my $class = 'list_item list_item1';
 		$class .= ' list_current_item' if $id == $curr_id;
 		$s .= Tr({-class => 'list_row'},
-			td({-class => $class}, $id)."\n",
-			td({-class => $class}, $name)."\n",
+			td({-class => $class.' list_item_name'}, $id)."\n",
+			td({-class => $class.' list_item_name'}, $name)."\n",
 			td({-class => $class}, $enter)."\n",
 			td({-class => $class}, $visit)."\n",
 			td({-rowspan => 2, -class =>
@@ -250,10 +301,95 @@ sub date_table {
 		my $class = 'list_item list_item2';
 		$class .= ' list_current_item' if $id == $curr_id;
 		$s .= Tr({-class => 'list_row2'},
-			td({-class => $class}, '&nbsp;')."\n",
+			td({-class => $class.' reprint'}, $reprint)."\n",
 			td({-class => $class}, $comp)."\n",
 			td({-class => $class}, $leave)."\n",
-			td({-class => $class.' reprint'}, $reprint)."\n"
+			td({-class => $class}, $parking)."\n"
+			)."\n";
+	}
+	$s .= end_table();
+	$s;
+}
+
+sub parking_table {
+
+	my$cnt = 0;
+	my $s;
+	my @date = Today();
+	# Choose the order of the table:
+	my @plh;
+	my $cmd = "select id, parking, enter_time, leave_time from pers where ".
+		"date(enter_time) <= ? and date(leave_time) >= ? and ".
+		"status='act' and parking != '' order by parking";
+		@plh = ($date_str, $date_str);
+	my $sth = $dbh->prepare($cmd);
+	$sth->execute(@plh);
+
+	$s .= start_table({-cellspacing => 0, -cellpadding => 0,
+		'class' => 'list_table'})."\n";
+
+	$s .= Tr({-class => 'list_hdr_row'}, th({-class => 'list_header'}, [
+		a({-href => $myurl.'?sort=id'}, 'Id')."\n",
+		a({-href => $myurl.'?sort=parking'}, 'License number')."\n"
+		]))."\n";
+	while (my ($id, $parking, $enter, $leave) = $sth->fetchrow_array) {
+
+		my $date = substr($enter, 0, 10);
+
+		my $class = 'list_item list_item1';
+		$class .= ' list_current_item' if $id == $curr_id;
+		$s .= Tr({-class => 'list_row'},
+			td({-class => $class.' list_item_name'}, $id)."\n",
+			td({-class => $class.' list_item_name'}, $parking)."\n",
+			)."\n";
+	}
+	$s .= end_table();
+	$s;
+}
+
+sub emerg_table {
+
+	my$cnt = 0;
+	my $s;
+	# Choose the order of the table:
+	my @plh;
+	my @date = Today();
+	my $cmd = "select id, name, company, from pers where ".
+		"date(enter_time) <= ? and date(leave_time) >= ? and ".
+		"status='act' order by name";
+	@plh = ($date_str, $date_str);
+
+	my $sth = $dbh->prepare($cmd);
+	$sth->execute(@plh);
+
+	$s .= start_table({-cellspacing => 0, -cellpadding => 0,
+		'class' => 'list_table'})."\n";
+
+	$s .= Tr({-class => 'list_hdr_row'}, th({-class => 'list_header'}, [
+		'Id', 'Name', 'To visit',
+		]))."\n";
+	while (my ($id, $name, $comp) = $sth->fetchrow_array) {
+
+		$cmd = "select uname from visit where id=?";
+		my $sth2 = $dbh->prepare($cmd);
+		$sth2->execute($id);
+		my (@uname) = $sth2->fetchrow_array;
+
+		$cmd = "select concat(name+' '+surname) ".
+			"from info where uname in (".
+			join(',', map { '?' } @uname).')';
+		my $sth3 = $dbh->prepare($cmd);
+		$sth3->execute(@uname);
+		my @rows = $sth3->fetchall_arrayref;
+		@rows = map { $_->[0] } @rows;
+		my $visit = join(', ', @rows);
+
+		my $class = 'list_item list_item1';
+		$class .= ' list_current_item' if $id == $curr_id;
+		$s .= Tr({-class => 'list_row'},
+			td({-class => $class.' list_item_name'}, $id)."\n",
+			td({-class => $class.' list_item_name'}, $name)."\n",
+			td({-class => $class}, $visit)."\n"
 			)."\n";
 	}
 	$s .= end_table();
