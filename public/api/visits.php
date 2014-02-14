@@ -4,7 +4,7 @@
  * Resource to POST a visit to the system.
  */
 
-require __DIR__.'/../bootstrap.php';
+require_once __DIR__.'/../bootstrap.php';
 
 /**
  * Saves visit. Throws Http_error on fail.
