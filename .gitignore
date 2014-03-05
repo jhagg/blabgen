@@ -11,3 +11,7 @@
 *.swp
 *.swo
 /public/client/css/Rot*.otf
+/conf/local.ini
+/conf/local_admin.ini
+/conf/host-*.ini
+!/conf/host-example.ini
