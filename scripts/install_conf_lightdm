@@ -1,0 +1,15 @@
+#!/usr/bin/perl -i
+
+
+while(<>) {
+	my $state = 1 if /^\[SeatDefaults\]/;
+
+	print;
+
+	if ($state) {
+		print "autologin-user=blabgen\n",
+			"autologin-user-timeout=5\n";
+		$state = 0;
+	}
+}
+
