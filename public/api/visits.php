@@ -301,7 +301,6 @@ function print_visitor_badge($visit_data ) {
 
 	$date = date('Y-m-d', $visit_data['end_date']);
 	$nr = $visit_data['id'];
-	$outfile = path_join(conf('card_picture_dir'), $nr.'.jpg');
 
 	extract($visit_data);
 	$d = getcwd();

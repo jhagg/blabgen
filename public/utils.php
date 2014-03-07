@@ -12,29 +12,34 @@ function conf( $conf ) {
 
 	if ( !$opts ) {
 		// local config overrides /etc/blabgen/
-		if ( is_readable( __DIR__ . '/../conf/config.ini' ) ) {
-			$opts = parse_ini_file( __DIR__ . '/../conf/config.ini' );
-			log_msg( LOG_DEBUG, sprintf( "Read config from '%s' ...",
-				__DIR__ . '/../conf/config.ini' ) );
-		} elseif ( is_readable( '/etc/blabgen/config.ini' ) ) {
-			$opts = parse_ini_file( '/etc/blabgen/config.ini' );
-			log_msg( LOG_DEBUG, sprintf( "Read config from '%s' ...",
-				'/etc/blabgen/config.ini' ) );
+		$config = '/etc/blabgen/config.ini';
+		$dev_config = __DIR__.'/../conf/config.ini';
+		if (is_readable($dev_config)) {
+			$config = $dev_config;
 		}
+		$opts = parse_ini_file($config);
+		log_msg( LOG_DEBUG, sprintf( "Read config from '%s' ...", $config) );
+
+		# global config that is local
+		$config = '/etc/blabgen/local.ini';
+		$dev_config = __DIR__.'/../conf/local.ini';
+		if (is_readable($dev_config)) {
+			$config = $dev_config;
+		}
+		if (is_readable($config)) {
+			$opts_tmp = parse_ini_file($config);
+			log_msg( LOG_DEBUG, sprintf( "Read config from '%s' ...", $config) );
+			$opts = array_merge($opts, (array) $opts_tmp );
+		}
+
 		// some configuration depends on remote hostname
 		$hn = get_remote_hostname();
-		// local config overrides /etc/blabgen/
-		if ( is_readable( __DIR__ . '/../conf/host-' . $hn . '.ini' ) ) {
-			$host_opts = parse_ini_file( __DIR__ . '/../conf/host-' . $hn . '.ini' );
-			$opts = array_merge( $opts, (array) $host_opts );
-			log_msg( LOG_DEBUG, sprintf( "Read host-specific config from '%s' ...",
-				__DIR__ . '/../conf/host-' . $hn . '.ini' ) );
-		} elseif ( is_readable( '/etc/blabgen/host-' . $hn . '.ini' ) ) {
-			$host_opts = parse_ini_file( '/etc/blabgen/host-' . $hn . '.ini' );
-			$opts = array_merge( $opts, (array) $host_opts );
-			log_msg( LOG_DEBUG, sprintf( "Read host-specific config from '%s' ...",
-				'/etc/blabgen/host-' . $hn . '.ini' ) );
-		}
+		$config = '/etc/blabgen/host-'.$hn.'.ini';
+		$dev_config = __DIR__.'/../conf/host-'.$hn.'.ini';
+		$opts_tmp = parse_ini_file($config);
+		log_msg(LOG_DEBUG, sprintf("Read config from '%s' ...", $config));
+		log_msg(LOG_DEBUG, sprintf("Read host-specific config from '%s' ...", $config));
+		$opts = array_merge($opts, (array) $opts_tmp );
 	}
 
 	return @$opts[$conf];
