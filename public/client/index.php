@@ -1,6 +1,6 @@
 <?php
 require __DIR__ . '/../bootstrap.php';
-$video_feed_url = conf('cam_video_url');
+$video_feed_url = conf('cam.video_url');
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -13,36 +13,36 @@ $video_feed_url = conf('cam_video_url');
 	<style type="text/css" media="screen">
 <?php
 if (
-	conf( 'logo_width' ) &&
-	conf( 'logo_height' ) &&
-	conf( 'logo_url' )
+	conf('ui.logo_width' ) &&
+	conf('ui.logo_height' ) &&
+	conf('ui.logo_url' )
 ):
 ?>
 .branding .company_name {
-	width: <?php echo conf('logo_width') ?>;
-	height: <?php echo conf('logo_height') ?>;
-	background: transparent url('<?php echo conf('logo_url') ?>') no-repeat 0 0;
+	width: <?php echo conf('ui.logo_width') ?>;
+	height: <?php echo conf('ui.logo_height') ?>;
+	background: transparent url('<?php echo conf('ui.logo_url') ?>') no-repeat 0 0;
 }
 <?php
 endif;
 
 if (
-	conf('custom_font_normal_url') &&
-	conf('custom_font_bold_url') &&
-	conf('custom_font_xbold_url')
+	conf('ui.custom_font_normal_url') &&
+	conf('ui.custom_font_bold_url') &&
+	conf('ui.custom_font_xbold_url')
 ):
 ?>
 @font-face {
 	font-family: custom;
-	src: url('<?php echo conf('custom_font_normal_url') ?>');
+	src: url('<?php echo conf('ui.custom_font_normal_url') ?>');
 }
 @font-face {
 	font-family: custom_bold;
-	src: url('<?php echo conf('custom_font_bold_url') ?>');
+	src: url('<?php echo conf('ui.custom_font_bold_url') ?>');
 }
 @font-face {
 	font-family: custom_xbold;
-	src: url('<?php echo conf('custom_font_xbold_url') ?>');
+	src: url('<?php echo conf('ui.custom_font_xbold_url') ?>');
 }
 body {
 	font-family: custom;
@@ -277,8 +277,8 @@ endif;
 
 			<p class="txt translatable">
 <?php
-if ( conf('thankyou_msg') ):
-	echo conf('thankyou_msg');
+if ( conf('ui.thankyou_msg') ):
+	echo conf('ui.thankyou_msg');
 else:
 ?>
 				You can now pick up your visitor's card at the reception desk.

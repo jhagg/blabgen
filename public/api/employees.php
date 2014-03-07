@@ -17,7 +17,8 @@ function get_employees( $opts ) {
 		'order_by' => 'first_name',
 	);
 
-	$sql = "SELECT uname username, name first_name, surname last_name FROM " . conf('db_employees_table');
+	$sql = 'SELECT uname username, name first_name, surname last_name '.
+		'FROM '.conf('db.employees_table');
 
 	$employees = array();
 

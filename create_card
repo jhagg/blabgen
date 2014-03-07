@@ -7,11 +7,10 @@ use Imager;
 use File::Temp;
 use Encode;
 use Config::IniFiles;
+use Sys::Syslog;
 
 use vars qw($verbose $debug);
 binmode(STDOUT, ':utf8');
-
-#set_log(-logmode => 0666, 'logfile' => conf('logfile'), -stdout => 0);
 
 ############################################################
 my $label_nr = 0;

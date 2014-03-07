@@ -211,9 +211,9 @@ function validate_visit_data($visit_data ) {
 
 /** Moves temporary picture to permanent picture dir. */
 function save_picture($tmp_picture_fname, $new_picture_id ) {
-	$temp_filename = path_join(conf('picture_tmp_dir'), $tmp_picture_fname);
+	$temp_filename = path_join(conf('picture.tmp_dir'), $tmp_picture_fname);
 
-	$picture_dir = conf('picture_dir');
+	$picture_dir = conf('picture.dir');
 	if (!is_readable($picture_dir )) {
 		mkdir($picture_dir);
 	}
@@ -224,10 +224,10 @@ function save_picture($tmp_picture_fname, $new_picture_id ) {
 	log_msg(LOG_DEBUG, sprintf('Attempting to move picture: %s -> %s',
 		$tmp_picture_fname, $target_filename ));
 
-	if (!is_dir(conf('picture_dir')) || !is_readable(conf('picture_dir'))) {
+	if (!is_dir(conf('picture.dir')) || !is_readable(conf('picture.dir'))) {
 		throw new Http_error(500,
 			sprintf('Directory is not readable: %s.',
-				conf('picture_dir')));
+				conf('picture.dir')));
 	}
 	if (!is_readable($temp_filename )) {
 		throw new Http_error(500,
@@ -249,18 +249,18 @@ function save_picture($tmp_picture_fname, $new_picture_id ) {
 
 /** Sends e-mail with visit info. */
 function send_visitor_email($visit_data, $receivers ) {
-	$from = conf('email_from_address');
-	$subject = conf('email_subject');
+	$from = conf('email.from_address');
+	$subject = conf('email.subject');
 	$tos = array();
-	$picture_url = sprintf(conf('email_picture_url_template'),
+	$picture_url = sprintf(conf('email.picture_url_template'),
 		$visit_data['srvhost'], $visit_data['webkey']);
 
 	foreach ($receivers as $r ) {
-		$tos[] = $r['uname'].'@'.conf('receiver_mail_domain');
+		$tos[] = $r['uname'].'@'.conf('gen.receiver_mail_domain');
 	}
 
-	if (conf('mode') == 'development' ) {
-		$tos = array(conf('admin_email_address'));
+	if (conf('gen.mode') == 'development' ) {
+		$tos = array(conf('gen.admin_email_address'));
 	}
 
 	$msg = 'You have a visitor: '.$visit_data['name'];
@@ -269,10 +269,10 @@ function send_visitor_email($visit_data, $receivers ) {
 
 	$msg .= sprintf("\n\n%s", $picture_url);
 
-	if (conf('send_email')) {
+	if (conf('gen.send_email')) {
 		$to = array_shift($tos);
 		$cc = implode(', ', $tos);
-		$bcc = conf('email_bcc_address');
+		$bcc = conf('email.bcc_address');
 		$hdrs = implode("\r\n", array(
 			'MIME-Version: 1.0',
 			'Content-Transfer-Encoding: 8bit',
@@ -285,12 +285,12 @@ function send_visitor_email($visit_data, $receivers ) {
 			$res, $to, $cc, $bcc ));
 	}
 
-	if (conf('email_output_file')) {
+	if (conf('email.output_file')) {
 		log_msg(LOG_DEBUG, sprintf("Writing e-mail to file '%s' ...",
-			conf('email_output_file')));
+			conf('email.output_file')));
 		$email = sprintf("From: %s\nTo: %s\nSubject: %s\n\n%s",
 			$from, implode(', ', $tos ), $subject, $msg);
-		file_put_contents(conf('email_output_file'), $email);
+		file_put_contents(conf('email.output_file'), $email);
 	}
 }
 
@@ -306,8 +306,8 @@ function print_visitor_badge($visit_data ) {
 	$d = getcwd();
 	chdir('../../');
 	log_msg(LOG_DEBUG, getcwd());
-	$cmd = sprintf(conf('print_badge_cmd'), $picture_filename, $name,
-		$company, $nr, $date, conf('printer_name'));
+	$cmd = sprintf(conf('print.badge_cmd'), $picture_filename, $name,
+		$company, $nr, $date, conf('print.name'));
 	log_msg(LOG_DEBUG, "Print: $cmd");
 	exec_cmd($cmd);
 	chdir($d);

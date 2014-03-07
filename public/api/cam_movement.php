@@ -16,7 +16,7 @@
 
 require __DIR__ . '/../bootstrap.php';
 
-$url = conf('cam_ptz_url');
+$url = conf('cam.ptz_url');
 
 $value = '0,0';
 $timestamp = time() * 1000;
@@ -39,14 +39,14 @@ $qry = http_build_query( array(
 	'continuouspantiltmove' => $value,
 ));
 $url = "$url?$qry";
-$cmd1 = sprintf( $cmd, conf('cam_username'), conf('cam_password'), $url );
+$cmd1 = sprintf( $cmd, conf('cam.username'), conf('cam.password'), $url );
 
 $qry = http_build_query( array(
 	'camera' => 1,
 	'continuouspantiltmove' => '0,0',
 ));
 $url = "$url?$qry";
-$cmd2 = sprintf( $cmd, conf('cam_username'), conf('cam_password'), $url );
+$cmd2 = sprintf( $cmd, conf('cam.username'), conf('cam.password'), $url );
 
 system( $cmd1 );
 system( $cmd2 );

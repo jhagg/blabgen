@@ -7,18 +7,19 @@
 /**
  * Returns configuration option. Options are stored in 'config.ini'.
  */
-function conf( $conf ) {
+function conf($conf) {
 	static $opts = null;
 
 	if ( !$opts ) {
 		// local config overrides /etc/blabgen/
+		$opts_tmp = array();
 		$config = '/etc/blabgen/config.ini';
 		$dev_config = __DIR__.'/../conf/config.ini';
 		if (is_readable($dev_config)) {
 			$config = $dev_config;
 		}
-		$opts = parse_ini_file($config);
-		log_msg( LOG_DEBUG, sprintf( "Read config from '%s' ...", $config) );
+		$opts = parse_ini_file($config, 1);
+		$debug[] .= sprintf( "Read config from '%s'", $config);
 
 		# global config that is local
 		$config = '/etc/blabgen/local.ini';
@@ -27,22 +28,28 @@ function conf( $conf ) {
 			$config = $dev_config;
 		}
 		if (is_readable($config)) {
-			$opts_tmp = parse_ini_file($config);
-			log_msg( LOG_DEBUG, sprintf( "Read config from '%s' ...", $config) );
-			$opts = array_merge($opts, (array) $opts_tmp );
+			$opts_tmp = parse_ini_file($config, 1);
+			$debug[] .= sprintf("Read config from '%s'", $config);
+			$opts = array_replace_recursive($opts, $opts_tmp );
 		}
 
 		// some configuration depends on remote hostname
 		$hn = get_remote_hostname();
 		$config = '/etc/blabgen/host-'.$hn.'.ini';
 		$dev_config = __DIR__.'/../conf/host-'.$hn.'.ini';
-		$opts_tmp = parse_ini_file($config);
-		log_msg(LOG_DEBUG, sprintf("Read config from '%s' ...", $config));
-		log_msg(LOG_DEBUG, sprintf("Read host-specific config from '%s' ...", $config));
-		$opts = array_merge($opts, (array) $opts_tmp );
+		$opts_tmp = parse_ini_file($config, 1);
+		$debug[] .= sprintf("Read host config from '%s'", $config);
+		$opts = array_replace_recursive($opts, $opts_tmp);
+
+		foreach ($debug as $d) {
+			log_msg(LOG_DEBUG, $d);
+		}
+#print "<pre>"; print_r($opts); print "</pre>"; 
+#exit(0);
 	}
 
-	return @$opts[$conf];
+	list($sec, $key) = explode('.', $conf);
+	return @$opts[$sec][$key];
 }
 
 /**
@@ -71,8 +78,8 @@ function path_join() {
  * Logs message to syslog.
  */
 function log_msg( $prio, $msg ) {
-	if ( conf('use_syslog') ) {
-		$prio = conf('syslog_facility') | $prio;
+	if ( conf('gen.use_syslog') ) {
+		$prio = conf('gen.syslog_facility') | $prio;
 		syslog( $prio, $msg );
 	}
 }
@@ -203,10 +210,10 @@ function db_connect() {
 		return $db;
 	}
 
-	$host = conf('db_host');
-	$db_name = conf('db_db');
-	$username = conf('db_user');
-	$password = conf('db_pwd');
+	$host = conf('db.host');
+	$db_name = conf('db.db');
+	$username = conf('db.user');
+	$password = conf('db.pwd');
 
 	$db = new mysqli( $host, $username, $password, $db_name );
 

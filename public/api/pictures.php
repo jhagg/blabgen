@@ -11,12 +11,12 @@ require __DIR__ . '/../bootstrap.php';
  * Takes a picture and returns the resulting URL.
  */
 function take_picture() {
-	$picture_dir = conf('picture_tmp_dir');
+	$picture_dir = conf('picture.tmp_dir');
 	$curl_download_cmd = '/usr/bin/curl ';
-	if (conf('cam_username')) {
+	if (conf('cam.username')) {
 		$curl_download_cmd .= '-u "'.
-			conf('cam_username').':'.
-			conf('cam_password').'" ';
+			conf('cam.username').':'.
+			conf('cam.password').'" ';
 	}
 	$curl_download_cmd .= '"%s" > "%s"';
  
@@ -41,14 +41,14 @@ function take_picture() {
 	} while ( !is_readable( $fname ) && $tries < $max_tries );
 
 	// download image from camera
-	$cmd = sprintf( $curl_download_cmd, conf('cam_picture_url'), $fname );
+	$cmd = sprintf( $curl_download_cmd, conf('cam.picture_url'), $fname );
 	exec_cmd( $cmd );
 
 	if ( !is_readable( $fname ) ) {
 		throw new Http_error( 500, 'Failed to download picture file' );
 	}
 
-	$url = sprintf( conf('picture_tmp_url_template'), basename( $fname ) );
+	$url = sprintf( conf('picture.tmp_url_template'), basename( $fname ) );
 
 	return $url;
 }
