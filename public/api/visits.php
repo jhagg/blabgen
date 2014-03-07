@@ -264,8 +264,8 @@ function send_visitor_email($visit_data, $receivers ) {
 	}
 
 	$msg = 'You have a visitor: '.$visit_data['name'];
-	if ($insert_data['company'])
-		$msg .= ' from '.$insert_data['company'];
+	if ($visit_data['company'])
+		$msg .= ' from '.$visit_data['company'];
 
 	$msg .= sprintf("\n\n%s", $picture_url);
 
@@ -308,6 +308,7 @@ function print_visitor_badge($visit_data ) {
 	log_msg(LOG_DEBUG, getcwd());
 	$cmd = sprintf(conf('print_badge_cmd'), $picture_filename, $name,
 		$company, $nr, $date, conf('printer_name'));
+	log_msg(LOG_DEBUG, "Print: $cmd");
 	exec_cmd($cmd);
 	chdir($d);
 }
