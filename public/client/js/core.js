@@ -471,9 +471,9 @@ var visys = {};
 
 		update_list();
 
-		// when date is selected, select all dates from today - selected
-		// so if today is tuesday, and user selects thursday, tuesday, wednesday
-		// and thursday will all be selected.
+		// when date is selected, select all dates from today -
+		// selected so if today is tuesday, and user selects thursday,
+		// tuesday, wednesday and thursday will all be selected.
 		$('.dates a:not(.disabled)').click( function() {
 			// store selected date
 			log( 'Selected date ...' );
