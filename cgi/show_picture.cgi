@@ -17,8 +17,18 @@ $config = '../conf/admin.ini' if -r '../conf/admin.ini'; # for debug
 $config = 'conf/admin.ini' if -r 'conf/admin.ini'; # for debug
 die "no config file" unless -r $config;
 
+my $local_conf = '/etc/blabgen/local_admin.ini';
+$local_conf = '../conf/local_admin.ini'
+	if -r '../conf/local_admin.ini'; # for debug
+$local_conf = 'conf/local_admin.ini' if -r 'conf/local_admin.ini'; # for debug
+
 my $config_obj = new Config::IniFiles(-file => $config);
 die "no config" unless $config_obj;
+
+if (-r $local_conf) {
+	$config_obj = new Config::IniFiles(-file => $local_conf,
+		-import => $config_obj);
+}
 
 my $dsn = 'DBI:mysql:database='.cnf('db.db').';host='.cnf('db.host').
 	';port='.cnf('db.port');

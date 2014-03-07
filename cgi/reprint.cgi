@@ -1,7 +1,5 @@
 #!/usr/bin/perl
 
-# (C) Copyright Axis Communications AB, LUND, SWEDEN
-
 use lib '.';				# <VISITOR_LIB>
 use vars qw($debug $verbose);
 use File::Path;
@@ -19,20 +17,31 @@ my $cgi = new CGI;
 my $config = '/etc/blabgen/admin.ini';
 $config = '../conf/admin.ini' if -r '../conf/admin.ini'; # for debug
 
+my $lconfig = '/etc/blabgen/local_admin.ini';
+$lconfig = '../conf/local_admin.ini'
+	if -r '../conf/local_admin.ini'; # for debug
+
 my $iaddr = inet_aton($cgi->remote_addr);
 (my $host  = gethostbyaddr($iaddr, AF_INET)) =~ s/\..*//;
 
 my $hconfig = "/etc/blabgen/host-$host.ini";
-$hconfig = '../conf/host-$host.ini' if -r '../conf/host-$host.ini'; # for debug
+$hconfig = "../conf/host-$host.ini" if -r "../conf/host-$host.ini"; # for debug
 
 die "no config file" unless -r $config;
 die "no host config file for $host" unless -r $hconfig;
 
-my $host_obj = new Config::IniFiles(-file => $hconfig);
-die "no host config for $host" unless $host_obj;
 
-my $config_obj = new Config::IniFiles(-file => $config, -import => $host_obj);
+my $config_obj = new Config::IniFiles(-file => $config);
 die "no config" unless $config_obj;
+
+if (-r $lconfig) {
+	$config_obj = new Config::IniFiles(-file => $lconfig,
+		-import => $config_obj);
+	die "no local config" unless $config_obj;
+}
+
+$config_obj = new Config::IniFiles(-file => $hconfig, -import => $config_obj);
+die "no host config for $host" unless $config_obj;
 
 my $dsn = 'DBI:mysql:database='.cnf('db.db').';host='.cnf('db.host').
 	';port='.cnf('db.port');
