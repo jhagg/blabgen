@@ -38,7 +38,7 @@ case "$1" in
 		echo "http_proxy=$RET export http_proxy" >> $prx
 		echo "https_proxy=$RET export https_proxy" >> $prx
 	fi
-	/usr/share/blabgen-client/install_conf_gdm /etc/gdm/gdm.conf
+	/usr/share/blabgen-client/install_conf_lightdm /etc/lightdm/lightdm.conf
 	/usr/share/blabgen-client/install_conf_kbd /etc/default/keyboard
 
     ;;

@@ -27,7 +27,8 @@ set -e
 case "$1" in
     configure)
 	chown -R www-data:www-data /var/log/blabgen \
-		/var/cache/blabgen /var/log/blabgen/cgi
+		/var/cache/blabgen
+
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

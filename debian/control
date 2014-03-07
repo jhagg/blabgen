@@ -15,7 +15,7 @@ Description: Badge label generator
 Package: blabgen-client
 Architecture: all
 Conflicts: 
-Depends: ${perl:Depends}, xscreensaver, miscfiles, gdm, fluxbox, xserver-xorg, iceweasel (>= 12.0)
+Depends: ${perl:Depends}, xscreensaver, miscfiles, lightdm, fluxbox, xserver-xorg, iceweasel (>= 17.0)
 Description: Badge label generator - client programs
  This package contains the visitor system
  used at Axis Communications, Lund, Sweden
