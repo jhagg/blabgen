@@ -28,7 +28,8 @@ function take_picture() {
 
 	if ( !is_readable( $picture_dir ) ) {
 		throw new Http_error( 500,
-			sprintf( 'Picture temp directory not readable: %s', $picture_dir ) );
+			sprintf( 'Picture temp directory not readable: %s',
+				$picture_dir ) );
 	}
 
 	$tries = 0;

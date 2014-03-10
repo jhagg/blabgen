@@ -37,6 +37,9 @@ function conf($conf) {
 		$hn = get_remote_hostname();
 		$config = '/etc/blabgen/host-'.$hn.'.ini';
 		$dev_config = __DIR__.'/../conf/host-'.$hn.'.ini';
+		if (is_readable($dev_config)) {
+			$config = $dev_config;
+		}
 		$opts_tmp = parse_ini_file($config, 1);
 		$debug[] .= sprintf("Read host config from '%s'", $config);
 		$opts = array_replace_recursive($opts, $opts_tmp);
@@ -49,6 +52,13 @@ function conf($conf) {
 	}
 
 	list($sec, $key) = explode('.', $conf);
+	if (!array_key_exists($sec, $opts)) {
+		throw new Http_error( 500, "section $sec in $conf missing");
+	}
+	if (!array_key_exists($key, $opts[$sec])) {
+		throw new Http_error( 500, "Key $conf missing");
+	}
+
 	return @$opts[$sec][$key];
 }
 

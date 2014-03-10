@@ -269,7 +269,7 @@ function send_visitor_email($visit_data, $receivers ) {
 
 	$msg .= sprintf("\n\n%s", $picture_url);
 
-	if (conf('gen.send_email')) {
+	if (conf('email.send')) {
 		$to = array_shift($tos);
 		$cc = implode(', ', $tos);
 		$bcc = conf('email.bcc_address');
@@ -296,7 +296,7 @@ function send_visitor_email($visit_data, $receivers ) {
 
 /** Prints visitor badge, using external program. */
 function print_visitor_badge($visit_data ) {
-	$picture_filename = path_join(conf('picture_dir'),
+	$picture_filename = path_join(conf('picture.dir'),
 		substr($visit_data['id'], -1 ), $visit_data['id'].'.jpg');
 
 	$date = date('Y-m-d', $visit_data['end_date']);
