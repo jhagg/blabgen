@@ -16,8 +16,23 @@ binmode(STDOUT, ':utf8');
 my $label_nr = 0;
 my ($company, $print_file, $name, $date, $pict_file, $output_file,
 	$show_pict, $no_utf8);
+# There should be a module for all this file testing...
 my $config = '/etc/blabgen/card.ini';
+$config = '../conf/config.ini' if -r '../conf/config.ini'; # for debug
 $config = 'conf/card.ini' if -r 'conf/card.ini'; # for debug
+
+my $local_conf = '/etc/blabgen/local.ini';
+$local_conf = '../conf/local.ini'
+	if -r '../conf/local.ini'; # for debug
+$local_conf = 'conf/local.ini' if -r 'conf/local.ini'; # for debug
+
+my $config_obj = new Config::IniFiles(-file => $config);
+die "no config" unless $config_obj;
+if (-r $local_conf) {
+	$config_obj = new Config::IniFiles(-file => $local_conf,
+		-import => $config_obj);
+}
+openlog('blabgen_create_card', undef, cnf('gen.syslog_facility'));
 
 GetOptions('v+' => \$verbose, 'd+' => \$debug,
 	'pict=s'	=> \$pict_file,
@@ -28,8 +43,6 @@ GetOptions('v+' => \$verbose, 'd+' => \$debug,
 	'printer=s'	=> \$print_file,
 	'show'		=> \$show_pict,
 	'o=s'		=> \$output_file);
-
-my $config_obj = new Config::IniFiles(-file => $config);
 
 $name = decode('UTF-8', $name);
 # create temp file (removed automatically)
@@ -78,11 +91,11 @@ my $img = new Imager;
 my $curr_y = $pic_y;
 
 # read background image
-$img->read(file => $back_file) || die $img->errstr;
+$img->read(file => $back_file) || err($img->errstr);
 
 # add picture
-die "no background file" unless -r $pict_file;
-my $pict = new Imager(file => $pict_file) || die Imager->errstr;
+err("no background file") unless -r $pict_file;
+my $pict = new Imager(file => $pict_file) || err(Imager->errstr);
 # crop width
 if ($crop_w) {
 	my $cr_pix = int($pict->getwidth*$crop_w/100);
@@ -96,11 +109,11 @@ $curr_y += $pict->getheight;
 
 # select font
 my $font = new Imager::Font(file => $fontf, utf8 => 1,
-	color => cnf('font.default'), aa => 1) || die Imager->errstr;
+	color => cnf('font.default'), aa => 1) || err(Imager->errstr);
 my $fontr = new Imager::Font(file => $fontf, utf8 => 1,
-	color => cnf('font.date'), aa => 1) || die Imager->errstr;
+	color => cnf('font.date'), aa => 1) || err(Imager->errstr);
 my $fontg = new Imager::Font(file => $fontf, utf8 => 1,
-	color => cnf('font.number'), aa => 1) || die Imager->errstr;
+	color => cnf('font.number'), aa => 1) || err(Imager->errstr);
 
 # print name
 my ($nsize, $nwidth, $nheight, $bheight) = find_size($font, $name, $txt_w);
@@ -145,7 +158,7 @@ print QR "$label_nr\n";
 close QR;
 
 # add QR-code
-my $qr = new Imager(file => $qr_file) || die Imager->errstr;
+my $qr = new Imager(file => $qr_file) || err(Imager->errstr);
 $qr = $qr->scale(xpixels => $qr_w);
 my $qr_x = $img->getwidth-$qr->getwidth-tpx(1);
 my $qr_y = $img->getheight-$qr->getheight-tpx(1);
@@ -153,7 +166,7 @@ $img->paste(left => $qr_x, top => $qr_y, img => $qr);
 
 # write final file
 
-$img->write(file => $output_file) || die $img->errstr;
+$img->write(file => $output_file) || err($img->errstr);
 
 (my $ps_file = $output_file) =~ s/\.png$/.ps/;
 system("convert $output_file $ps_file");
@@ -197,4 +210,9 @@ sub cnf {
 	my $v = $config_obj->val($sect, $key);
 	print "$id = '$v'\n" if $verbose;
 	$v;
+}
+
+sub err {
+	print STDERR "Error: @_\n";
+	syslog('err', join(', ', @_));
 }

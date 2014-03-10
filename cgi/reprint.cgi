@@ -2,6 +2,7 @@
 
 use lib '.';				# <VISITOR_LIB>
 use vars qw($debug $verbose);
+use strict;
 use File::Path;
 use Config::IniFiles;
 use Carp;
@@ -10,16 +11,16 @@ use Socket;
 use DBI;
 use CGI qw(:standard);
 use CGI::Carp;
-use strict;
+use Sys::Syslog;
 
 my $cgi = new CGI;
 
-my $config = '/etc/blabgen/admin.ini';
-$config = '../conf/admin.ini' if -r '../conf/admin.ini'; # for debug
+my $config = '/etc/blabgen/config.ini';
+$config = '../conf/config.ini' if -r '../conf/config.ini'; # for debug
 
-my $lconfig = '/etc/blabgen/local_admin.ini';
-$lconfig = '../conf/local_admin.ini'
-	if -r '../conf/local_admin.ini'; # for debug
+my $lconfig = '/etc/blabgen/local.ini';
+$lconfig = '../conf/local.ini'
+	if -r '../conf/local.ini'; # for debug
 
 my $iaddr = inet_aton($cgi->remote_addr);
 (my $host  = gethostbyaddr($iaddr, AF_INET)) =~ s/\..*//;
@@ -42,6 +43,8 @@ if (-r $lconfig) {
 
 $config_obj = new Config::IniFiles(-file => $hconfig, -import => $config_obj);
 die "no host config for $host" unless $config_obj;
+
+openlog('blabgen_reprint_cgi', undef, cnf('gen.syslog_facility'));
 
 my $dsn = 'DBI:mysql:database='.cnf('db.db').';host='.cnf('db.host').
 	';port='.cnf('db.port');
@@ -81,7 +84,8 @@ system($cmd);
 print redirect('list.cgi');
 exit 0;
 sub err {
-	print h1("Error@_")."\n";
+	print h1("Error: @_")."\n";
+	syslog('err', join(', ', @_));
 	exit 1;
 }
 
