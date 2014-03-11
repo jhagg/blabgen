@@ -14,16 +14,15 @@ binmode(STDOUT, ':utf8');
 
 ############################################################
 my $label_nr = 0;
-my ($company, $print_file, $name, $date, $pict_file, $output_file,
+my ($company, $pr_queue, $name, $date, $pict_file, $output_file,
 	$show_pict, $no_utf8);
 # There should be a module for all this file testing...
-my $config = '/etc/blabgen/card.ini';
-$config = '../conf/config.ini' if -r '../conf/config.ini'; # for debug
-$config = 'conf/card.ini' if -r 'conf/card.ini'; # for debug
+my $config = '/etc/blabgen/config.ini';
+$config = '../../conf/config.ini' if -r '../../conf/config.ini'; # for debug
+$config = 'conf/config.ini' if -r 'conf/config.ini'; # for debug
 
 my $local_conf = '/etc/blabgen/local.ini';
-$local_conf = '../conf/local.ini'
-	if -r '../conf/local.ini'; # for debug
+$local_conf = '../../conf/local.ini' if -r '../../conf/local.ini'; # for debug
 $local_conf = 'conf/local.ini' if -r 'conf/local.ini'; # for debug
 
 my $config_obj = new Config::IniFiles(-file => $config);
@@ -32,7 +31,7 @@ if (-r $local_conf) {
 	$config_obj = new Config::IniFiles(-file => $local_conf,
 		-import => $config_obj);
 }
-openlog('blabgen_create_card', undef, cnf('gen.syslog_facility'));
+openlog('blabgen_create_card', undef, main_cnf('gen.syslog_facility'));
 
 GetOptions('v+' => \$verbose, 'd+' => \$debug,
 	'pict=s'	=> \$pict_file,
@@ -40,7 +39,7 @@ GetOptions('v+' => \$verbose, 'd+' => \$debug,
 	'comp:s'	=> \$company,
 	'nr=i'		=> \$label_nr,
 	'date=s'	=> \$date,
-	'printer=s'	=> \$print_file,
+	'printer=s'	=> \$pr_queue,
 	'show'		=> \$show_pict,
 	'o=s'		=> \$output_file);
 
@@ -59,13 +58,14 @@ my $qr_file = cnf('default.qr_file');
 $company = cnf('debug.company') unless defined $company;
 $name = cnf('debug.name') unless defined $name;
 $label_nr = cnf('debug.nr') unless $label_nr;
+syslog('debug', "nr %s, name %s, comp %s", $label_nr, $name, $company);
 
 $label_nr = sprintf('%06d', $label_nr);
 $date = POSIX::strftime("%F", localtime) unless $date;
 
-my $fontf	= cnf('card.font');
-my $card_w	= tpx(cnf('card.width'));	# width in mm
-my $card_h	= tpx(cnf('card.height'));	# height in mm
+my $fontf	= cnf('font.name');
+my $card_w	= tpx(cnf('phys.width'));	# width in mm
+my $card_h	= tpx(cnf('phys.height'));	# height in mm
 
 my $pic_y	= tpx(cnf('pict.y_off'));	# pict y-offset
 my $pic_h	= tpx(cnf('pict.height'));	# pict height
@@ -167,10 +167,19 @@ $img->paste(left => $qr_x, top => $qr_y, img => $qr);
 # write final file
 
 $img->write(file => $output_file) || err($img->errstr);
+syslog('debug', "outfile %s", $output_file);
 
 (my $ps_file = $output_file) =~ s/\.png$/.ps/;
-system("convert $output_file $ps_file");
-system("lp -d $print_file $ps_file") if !$debug && $print_file;
+if (cnf('debug.a4')) {
+	my $white = cnf('debug.white');
+	system("composite -gravity center $output_file $white $ps_file");
+}
+else {
+	system("convert $output_file $ps_file");
+}
+syslog('debug', "print to %s, file %s", $pr_queue, $ps_file)
+	unless $debug || !$pr_queue;
+system("lp -d $pr_queue $ps_file") if !$debug && $pr_queue;
 exit 0;
 ######################################################################
 sub find_size {
@@ -204,6 +213,9 @@ sub tpx {
 }
 
 sub cnf {
+	main_cnf('card_'.$_[0]);
+}
+sub main_cnf {
 	my $id = shift;
 
 	my ($sect, $key) = split(/\./, $id);
