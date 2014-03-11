@@ -11,6 +11,11 @@ function conf($conf) {
 	static $opts = null;
 
 	if ( !$opts ) {
+		$script = 'blabgen unknown';
+		if (preg_match('!([^/]+)$!', $_SERVER['SCRIPT_FILENAME'],
+			$match)) {
+			$script = $match[1];
+		}
 		// local config overrides /etc/blabgen/
 		$opts_tmp = array();
 		$config = '/etc/blabgen/config.ini';
@@ -44,6 +49,9 @@ function conf($conf) {
 		$debug[] .= sprintf("Read host config from '%s'", $config);
 		$opts = array_replace_recursive($opts, $opts_tmp);
 
+		$facil = 'LOG_'.strtoupper($opts['gen']['syslog_facility']);
+		eval('$facil = '.$facil.';');
+		openlog($script, 0, $facil);
 		foreach ($debug as $d) {
 			log_msg(LOG_DEBUG, $d);
 		}
@@ -89,7 +97,7 @@ function path_join() {
  */
 function log_msg( $prio, $msg ) {
 	if ( conf('gen.use_syslog') ) {
-		$prio = conf('gen.syslog_facility') | $prio;
+		$prio = 'LOG_'.strtoupper(conf('gen.syslog_log_level')) | $prio;
 		syslog( $prio, $msg );
 	}
 }
