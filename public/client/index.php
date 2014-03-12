@@ -60,9 +60,6 @@ screen-receiver input {
 	font-weight: normal;
 	font-family: xbold_font;
 }
-<?php
-endif;
-?>
 	</style>
 </head>
 <body>
