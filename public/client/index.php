@@ -25,27 +25,21 @@ if (
 }
 <?php
 endif;
-
-if (
-	conf('ui.custom_font_normal_url') &&
-	conf('ui.custom_font_bold_url') &&
-	conf('ui.custom_font_xbold_url')
-):
 ?>
 @font-face {
-	font-family: custom;
-	src: url('<?php echo conf('ui.custom_font_normal_url') ?>');
+	font-family: normal_font;
+	src: url('<?php echo conf('ui.font_normal_url') ?>');
 }
 @font-face {
-	font-family: custom_bold;
-	src: url('<?php echo conf('ui.custom_font_bold_url') ?>');
+	font-family: bold_font;
+	src: url('<?php echo conf('ui.font_bold_url') ?>');
 }
 @font-face {
-	font-family: custom_xbold;
-	src: url('<?php echo conf('ui.custom_font_xbold_url') ?>');
+	font-family: xbold_font;
+	src: url('<?php echo conf('ui.font_xbold_url') ?>');
 }
 body {
-	font-family: custom;
+	font-family: normal_font;
 }
 label,
 .label,
@@ -58,13 +52,13 @@ input[type=text],
 .countdown span,
 .cam-ctrl span {
 	font-weight: normal;
-	font-family: custom_bold;
+	font-family: bold_font;
 }
 .footer li .item,
 .main h1,
 screen-receiver input {
 	font-weight: normal;
-	font-family: custom_xbold;
+	font-family: xbold_font;
 }
 <?php
 endif;
