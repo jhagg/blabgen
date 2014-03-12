@@ -2,24 +2,9 @@
  * Main stylesheet for Blabgen.
  */
 
-@import url(reset.css);
-
-@font-face {
-	font-family: rotis;
-	src: url(RotisSansSerifPro.otf);
-}
-@font-face {
-	font-family: rotis_bold;
-	src: url(RotisSansSerifPro-Bold.otf);
-}
-@font-face {
-	font-family: rotis_xbold;
-	src: url(RotisSansSerifPro-ExtraBold.otf);
-}
-
 body {
 	background: #111;
-	font-family: rotis;
+	font-family: normal_font;
 }
 
 #doc {
@@ -147,7 +132,7 @@ footer li .item {
 	display: block;
 	position: relative;
 	background: transparent url(images/crumb-separator-next.png) no-repeat 100% 0;
-	font-family: rotis_xbold;
+	font-family: xbold_font;
 	color: #ababab;
 }
 footer li .item strong {
@@ -280,7 +265,7 @@ section.main {
 }
 .main h1 {
 	font-size: 80px;
-	font-family: rotis_xbold;
+	font-family: xbold_font;
 	text-align: center;
 	text-shadow: #fff 0 1px 0;
 	line-height: 1.35;
@@ -291,20 +276,20 @@ section.main {
 	margin-top: 160px;
 	margin-bottom: 30px;
 	font-size: 30px;
-	font-family: rotis_bold;
+	font-family: bold_font;
 	display: block;
 }
 .label2 {
 	margin-top: 20px;
 	margin-bottom: 30px;
 	font-size: 30px;
-	font-family: rotis_bold;
+	font-family: bold_font;
 	display: block;
 }
 
 input[type=text] {
 	font-size: 42px;
-	font-family: rotis_xbold;
+	font-family: xbold_font;
 	border-width: 17px;
 	background: transparent;
 	-moz-border-image: url(images/input-white.png) 17/17px stretch stretch;
@@ -326,7 +311,7 @@ input[type=text] {
 	margin-bottom: 45px;
 }
 .screen-start p.help {
-	font-family: rotis_bold;
+	font-family: bold_font;
 	font-size: 20px;
 	color: #798287;
 	clear: both;
@@ -343,7 +328,7 @@ input[type=text] {
 }
 .screen-done p.txt {
 	font-size: 20px;
-	font-family: rotis_bold;
+	font-family: bold_font;
 	margin-bottom: 55px;
 }
 
@@ -358,7 +343,7 @@ input[type=text] {
 }
 .screen-error p.txt {
 	font-size: 20px;
-	font-family: rotis_bold;
+	font-family: bold_font;
 	margin-bottom: 55px;
 }
 
@@ -417,7 +402,7 @@ input[type=text] {
 }
 .screen-receiver input {
 	font-size: 18px;
-	font-family: rotis_xbold;
+	font-family: xbold_font;
 	border-width: 17px;
 	background: transparent;
 	-moz-border-image: url(images/input-white.png) 17 / 17px stretch stretch;
@@ -451,13 +436,13 @@ input[type=text] {
 .receiver-drop {
 	font-size: 22px;
 	line-height: 25px;
-	font-family: rotis;
+	font-family: normal_font;
 }
 .receiver-cont {
 	display: block;
 	width: 318px;
 	font-size: 20px;
-	font-family: rotis;
+	font-family: normal_font;
 /*
 
 	border-width: 17px;
@@ -467,7 +452,7 @@ input[type=text] {
 }
 
 .receiver-choice {
-	font-family: rotis;
+	font-family: normal_font;
 	margin-top: 5px;
 	font-size: 25px;
 	line-height: 25px;
@@ -492,7 +477,7 @@ input[type=text] {
 	margin-top: 0;
 	margin-bottom: 30px;
 	font-size: 30px;
-	font-family: rotis_bold;
+	font-family: bold_font;
 	display: block;
 }
 .video-w {
@@ -531,7 +516,7 @@ input[type=text] {
 	left: 0px;
 	width: 434px;
 	color: #fff;
-	font-family: rotis_bold;
+	font-family: bold_font;
 }
 .ctrl .delete .btn {
 	font-size: 13px;
@@ -554,7 +539,7 @@ p.delete {
 	display: inline-block;
 	font-size: 30px;
 	line-height: 1;
-	font-family: rotis_bold;
+	font-family: bold_font;
 	padding: 10px 10px 0px 11px;
 	background-color: #464646;
 	border-radius: 4px;
@@ -590,7 +575,7 @@ p.delete {
 	clear: both;
 }
 .cam-ctrl span {
-	font-family: rotis_bold;
+	font-family: bold_font;
 	color: #7e888e;
 	font-size: 18px;
 	padding: 11px 5px 9px 5px;
