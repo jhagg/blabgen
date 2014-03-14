@@ -1,0 +1,7 @@
+
+/var/log/blabgen/*.log {
+	rotate 20
+	compress
+	missingok
+	size 4M
+}
