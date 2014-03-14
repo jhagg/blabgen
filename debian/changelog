@@ -1,3 +1,9 @@
+blabgen (3.6-1) unstable; urgency=medium
+
+  * added colour adjustment for camera picture 
+
+ -- Jörgen Hägg <jh@axis.com>  Fri, 14 Mar 2014 13:44:30 +0100
+
 blabgen (3.5-1) unstable; urgency=medium
 
   * added parking field and new versions of jquery. The
