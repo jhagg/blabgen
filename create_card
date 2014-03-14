@@ -46,15 +46,8 @@ GetOptions('v+' => \$verbose, 'd+' => \$debug,
 $name = decode('UTF-8', $name);
 # create temp file (removed automatically)
 my $tmp_obj;
-unless ($output_file) {
-	$tmp_obj = new File::Temp(DIR => cnf('temp.dir'),
-		TEMPLATE => cnf('temp.template'),
-		SUFFIX => cnf('temp.suffix'));
-	$output_file = $tmp_obj->filename;
-}
 
 $pict_file = cnf('default.file') unless $pict_file;
-my $qr_file = cnf('default.qr_file');
 $company = cnf('debug.company') unless defined $company;
 $name = cnf('debug.name') unless defined $name;
 $label_nr = cnf('debug.nr') unless $label_nr;
@@ -96,6 +89,11 @@ $img->read(file => $back_file) || err($img->errstr);
 # add picture
 err("no background file") unless -r $pict_file;
 my $pict = new Imager(file => $pict_file) || err(Imager->errstr);
+
+my $gamma = cnf('pict.gamma');
+my @map = map { int(0.5+255*($_/255)**$gamma) } 0..255;
+
+$pict->map(all => \@map);
 # crop width
 if ($crop_w) {
 	my $cr_pix = int($pict->getwidth*$crop_w/100);
@@ -152,6 +150,14 @@ $num_y -= $line_sep2+$bbx[4];
 $img->string(x => $txt_x, y => $num_y, size => $valid_size,
 	string => $str, font => $fontr);
 
+my $unlink = cnf('debug.unlink');
+my $qr_obj = new File::Temp(DIR => cnf('temp.dir'),
+	UNLINK => $unlink,
+	TEMPLATE => cnf('temp.qr_template'),
+	SUFFIX => cnf('temp.suffix'));
+my $qr_file = $qr_obj->filename;
+$qr_file = cnf('debug.qr_file') if $debug;
+
 # encode number
 open(QR, "|qrencode -o $qr_file");
 print QR "$label_nr\n";
@@ -166,22 +172,49 @@ $img->paste(left => $qr_x, top => $qr_y, img => $qr);
 
 # write final file
 
+unless ($output_file) {
+	$tmp_obj = new File::Temp(DIR => cnf('temp.dir'),
+		UNLINK => $unlink,
+		TEMPLATE => cnf('temp.template'),
+		SUFFIX => cnf('temp.suffix'));
+	$output_file = $tmp_obj->filename;
+}
+
 $img->write(file => $output_file) || err($img->errstr);
 syslog('debug', "outfile %s", $output_file);
 
-(my $ps_file = $output_file) =~ s/\.png$/.ps/;
+my $ps_obj = new File::Temp(DIR => cnf('temp.dir'),
+	UNLINK => $unlink,
+	TEMPLATE => cnf('temp.ps_template'), SUFFIX => '.ps');
+my $ps_file = $ps_obj->filename;
+$ps_file = cnf('debug.ps_file') if $debug;
+
 if (cnf('debug.a4')) {
 	my $white = cnf('debug.white');
-	system("composite -gravity center $output_file $white $ps_file");
+	syslog('debug', "composite %s %s %s", $output_file, $white, $ps_file);
+	do_system("composite -gravity center $output_file $white $ps_file");
 }
 else {
-	system("convert $output_file $ps_file");
+	syslog('debug', "convert %s %s", $output_file, $ps_file);
+	do_system("convert $output_file $ps_file");
 }
-syslog('debug', "print to %s, file %s", $pr_queue, $ps_file)
-	unless $debug || !$pr_queue;
-system("lp -d $pr_queue $ps_file") if !$debug && $pr_queue;
+if ($pr_queue && !$debug) {
+	syslog('debug', "print to %s, file %s", $pr_queue, $ps_file);
+	do_system("lp -d $pr_queue $ps_file");
+}
 exit 0;
 ######################################################################
+sub do_system {
+	my $cmd = shift;
+
+	open(PIPE, "$cmd 2>&1 |");
+	chomp(my @err =  <PIPE>);
+	close(PIPE);
+	my $err = join(', ', @err);
+	syslog('debug', "command %s: %s", $cmd, $err);
+	$err;
+}
+
 sub find_size {
 	my $font = shift;
 	my $name = shift;
