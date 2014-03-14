@@ -1,5 +1,4 @@
 /var/log/blabgen
-/var/log/blabgen/cgi
 /var/cache/blabgen
 /var/cache/blabgen/pictures
 /var/cache/blabgen/pictures_tmp

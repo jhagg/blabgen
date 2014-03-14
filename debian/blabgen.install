@@ -8,3 +8,4 @@ cgi/reprint.cgi		usr/share/blabgen/web/admin
 cgi/show_picture.cgi	usr/share/blabgen/web
 conf/[ac]*.ini		etc/blabgen
 card/*.png		etc/blabgen
+syslog/blabgen.conf	etc/rsyslog.d
