@@ -44,8 +44,6 @@ GetOptions('v+' => \$verbose, 'd+' => \$debug,
 	'o=s'		=> \$output_file);
 
 $name = decode('UTF-8', $name);
-# create temp file (removed automatically)
-my $tmp_obj;
 
 $pict_file = cnf('default.file') unless $pict_file;
 $company = cnf('debug.company') unless defined $company;
@@ -82,18 +80,25 @@ my $back_file	= cnf('pict.background');	# background picture
 
 my $img = new Imager;
 my $curr_y = $pic_y;
+my $unlink = cnf('debug.unlink');
 
 # read background image
 $img->read(file => $back_file) || err($img->errstr);
 
 # add picture
 err("no background file") unless -r $pict_file;
-my $pict = new Imager(file => $pict_file) || err(Imager->errstr);
+my $pic_obj = new File::Temp(DIR => cnf('temp.dir'),
+	UNLINK => $unlink,
+	TEMPLATE => cnf('temp.pic_template'),
+	SUFFIX => cnf('temp.suffix'));
+my $in_pict = $pic_obj->filename;
 
-my $gamma = cnf('pict.gamma');
-my @map = map { int(0.5+255*($_/255)**$gamma) } 0..255;
+# fix colours
+my $pic_opts = cnf('pict.options');
+do_system("convert $pic_opts $pict_file $in_pict");
 
-$pict->map(all => \@map);
+my $pict = new Imager(file => $in_pict) || err(Imager->errstr);
+
 # crop width
 if ($crop_w) {
 	my $cr_pix = int($pict->getwidth*$crop_w/100);
@@ -150,7 +155,6 @@ $num_y -= $line_sep2+$bbx[4];
 $img->string(x => $txt_x, y => $num_y, size => $valid_size,
 	string => $str, font => $fontr);
 
-my $unlink = cnf('debug.unlink');
 my $qr_obj = new File::Temp(DIR => cnf('temp.dir'),
 	UNLINK => $unlink,
 	TEMPLATE => cnf('temp.qr_template'),
@@ -173,7 +177,7 @@ $img->paste(left => $qr_x, top => $qr_y, img => $qr);
 # write final file
 
 unless ($output_file) {
-	$tmp_obj = new File::Temp(DIR => cnf('temp.dir'),
+	my $tmp_obj = new File::Temp(DIR => cnf('temp.dir'),
 		UNLINK => $unlink,
 		TEMPLATE => cnf('temp.template'),
 		SUFFIX => cnf('temp.suffix'));
