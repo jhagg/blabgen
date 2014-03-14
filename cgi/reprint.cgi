@@ -58,28 +58,32 @@ my $sth = $dbh->prepare("select id, name, company, webhost, enter_time ".
 	"from pers where webkey = ?");
 
 unless ($sth->execute($key)) {
-    print $cgi->header();
-    err($dbh->errstr);
+	print $cgi->header();
+	err($dbh->errstr);
 }
 my ($id, $name, $company, $webhost, $enter) = $sth->fetchrow_array();
 unless ($id) {
-    print $cgi->header();
-    print pre("Picture not found, wrong key");
-    exit 0;
+	print $cgi->header();
+	print pre("Picture not found, wrong key");
+	syslog('debug', "wrong key %s", $key);
+	exit 0;
 }
+syslog('debug', "id %s, name %s, company %s, host %s, date %s",
+	$id, $name, $company, $webhost, $enter);
 my $subdir = substr($id, -1, 1);
 my $path = sprintf(cnf('picture.dir')."/$subdir/$id.jpg", $webhost);
 unless (-e $path) {
-    print $cgi->header();
-    print pre("Picture not found, probably too old");
-    exit 0;
+	print $cgi->header();
+	print pre("Picture not found, probably too old");
+	exit 0;
 }
+chdir('../..');
 
-my $printer = cnf('printing.printer_name');
-my $cmd = sprintf cnf('printer.cmd'), $path, $name, $company,
+my $printer = cnf('print.name');
+my $cmd = sprintf cnf('print.badge_cmd'), $path, $name, $company,
 	$id, $enter, $printer;
 
-system($cmd);
+do_system($cmd);
 
 print redirect('list.cgi');
 exit 0;
@@ -94,6 +98,17 @@ sub cnf {
 
 	my ($sect, $key) = split(/\./, $id);
 	my $v = $config_obj->val($sect, $key);
+	$v =~ s/^'(.*)'$/\1/;
 	print "$id = '$v'\n" if $verbose;
 	$v;
+}
+sub do_system {
+	my $cmd = shift;
+
+	open(PIPE, "$cmd 2>&1 |");
+	chomp(my @err =  <PIPE>);
+	close(PIPE);
+	my $err = join(', ', @err);
+	syslog('debug', "command %s: %s", $cmd, $err);
+	$err;
 }

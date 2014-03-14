@@ -79,6 +79,7 @@ sub cnf {
 
 	my ($sect, $key) = split(/\./, $id);
 	my $v = $config_obj->val($sect, $key);
+	$v =~ s/^'(.*)'$/\1/;
 	print "$id = '$v'\n" if $verbose;
 	$v;
 }

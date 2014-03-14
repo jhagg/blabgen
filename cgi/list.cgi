@@ -294,7 +294,7 @@ sub date_table {
 		$leave = a({-href => gen_url("leave_$id=1"),
 			-title => 'Click here when person '.
 			'has left the building'}, $leave) if $status eq 'act';
-		my $rep_url = sprintf(cnf('reprint.cgi'), $wkey);
+		my $rep_url = sprintf(cnf('picture.reprint'), $wkey);
 		$reprint = a({-href => $rep_url,
 			-class => 'reprint',
 			-title => 'Print label again'}, 'R') if $wkey &&
@@ -420,6 +420,7 @@ sub cnf {
 
 	my ($sect, $key) = split(/\./, $id);
 	my $v = $config_obj->val($sect, $key);
+	$v =~ s/^'(.*)'$/\1/;
 	print "$id = '$v'\n" if $verbose;
 	$v;
 }
