@@ -9,6 +9,6 @@ xset -dpms
 
 fluxbox&
 
-xscreensaver&
+xscreensaver -nosplash&
 
 iceweasel `cat /home/blabgen/url`
