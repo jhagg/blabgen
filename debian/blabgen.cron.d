@@ -1,1 +1,1 @@
-#0 4 * * * visitor /usr/lib/blabgen/clean_picture_dir
+#0 4 * * * blabgen /usr/lib/blabgen/clean_picture_dir

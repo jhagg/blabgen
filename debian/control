@@ -7,15 +7,31 @@ Standards-Version: 3.5.2
 
 Package: blabgen
 Architecture: all
-Depends: php5 (>= 5.3), perl-modules, libdbd-mysql-perl, libmime-lite-perl, libstring-random-perl, curl, cups-client, imagemagick, libapache2-mod-php5, php5-mysql, php5-imap, libimager-perl, libconfig-inifiles-perl, qrencode, ttf-freefont | fonts-freefont-ttf, libdate-calc-perl, libjs-jquery, rsyslog
+Depends: blabgen-common, php5 (>= 5.3), perl-modules, libdbd-mysql-perl, libmime-lite-perl, libstring-random-perl, curl, cups-client, imagemagick, libapache2-mod-php5, php5-mysql, php5-imap, libimager-perl, libconfig-inifiles-perl, qrencode, ttf-freefont | fonts-freefont-ttf, libdate-calc-perl, libjs-jquery, rsyslog
 Description: Badge label generator
  This package contains the visitor system
  used at Axis Communications, Lund, Sweden
+ .
+ The server packade that contains the blabgen web site and
+ utility programs
 
 Package: blabgen-client
 Architecture: all
 Conflicts: 
-Depends: ${perl:Depends}, xscreensaver, miscfiles, lightdm, fluxbox, xserver-xorg, iceweasel (>= 17.0)
+Depends: blabgen-common, ${perl:Depends}, xscreensaver, miscfiles, lightdm, fluxbox, xserver-xorg, iceweasel (>= 17.0)
 Description: Badge label generator - client programs
  This package contains the visitor system
  used at Axis Communications, Lund, Sweden
+ .
+ All files needed by the blabgen client
+
+Package: blabgen-common
+Architecture: all
+Conflicts: 
+Depends: ${perl:Depends}
+Description: Badge label generator - common files
+ This package contains the visitor system
+ used at Axis Communications, Lund, Sweden
+ .
+ Just some common files that shouldn't be
+ duplicated
