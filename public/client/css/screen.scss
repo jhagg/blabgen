@@ -393,46 +393,8 @@ input[type=text] {
  * Receiver page.
  */
 .screen-receiver {
-/*	text-align: left; */
-}
-/*
-.screen-receiver label {
-	margin: 0;
-	text-align: center;
-}
-.screen-receiver input {
-	font-size: 18px;
-	font-family: xbold_font;
-	border-width: 17px;
-	background: transparent;
-	-moz-border-image: url(images/input-white.png) 17 / 17px stretch stretch;
-	width: 300px;
-}
-.screen-receiver form {
-		position: absolute;
-		top: 0;
-		left: 100px;
-		width: 812px;
-		text-align: left;
-
 }
 
-.receiver-filter-w label {
-	display: none;
-	margin-top: 0;
-	margin-bottom: 0;
-	text-align: left;
-}
-#data-receiver option {
-		display: block;
-		width: 318px;
-		margin-left: 8px;
-}
-#none-match {
-	margin: 4px 8px 8px 8px;
-	display: block;
-}
-*/
 .receiver-drop {
 	font-size: 22px;
 	line-height: 25px;
@@ -443,12 +405,7 @@ input[type=text] {
 	width: 318px;
 	font-size: 20px;
 	font-family: normal_font;
-/*
 
-	border-width: 17px;
-	background: transparent; 
-	-moz-border-image: url(images/input-white.png) 17/17px stretch stretch;
-*/
 }
 
 .receiver-choice {
