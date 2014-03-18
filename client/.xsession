@@ -12,3 +12,4 @@ fluxbox&
 xscreensaver -nosplash&
 
 iceweasel `cat /home/blabgen/url`
+#iceweasel -safe-mode
