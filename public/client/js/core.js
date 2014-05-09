@@ -389,7 +389,8 @@ var visys = {};
 
 	/** Entering 'date' */
 	root.bind( 'date:enter', function () {
-		// next button is always available, because a date is always selected
+		// next button is always available, because a date is always
+		// selected
 		root.enable(root.nb());
 		root.nb().unbind('click');
 		root.nb().click( function () {
@@ -401,17 +402,19 @@ var visys = {};
 		today.setHours(23);
 		today.setMinutes(59);
 		today.setSeconds(59);
+		today.setMilliseconds(0);
 		dates = [];
 		dates[0] = new Date(today);
-		// (today.getDate()+5)%6 gives todays day # w/ monday = 0 and sunday = 6.
-		// last monday's date = today's date - today's day #
+		// (today.getDate()+5)%6 gives todays day # w/ monday = 0 and
+		// sunday = 6.  last monday's date = today's date - today's day
+		// #
 		dates[0].setDate( today.getDate() - (today.getDay()+5) % 6 );
 		for ( var i = 1; i <= 4; i++ ) {
 			dates[i] = new Date(dates[0]);
 			dates[i].setDate( dates[0].getDate() + i );
 		}
 
-		console.log( dates );
+		log( dates );
 
 		// updates dates list
 		var update_list = function () {
@@ -427,8 +430,8 @@ var visys = {};
 					root.disable( $(this) );
 				}
 
-				// select selected dates, compare indices instead of actual dates for
-				// robustness
+				// select selected dates, compare indices
+				// instead of actual dates for robustness
 				if (
 					user_data.end_date &&
 					user_data.end_date_index >= index &&
@@ -508,9 +511,10 @@ var visys = {};
 		if ( !root.visited('receiver') ) {
 			s = $('#data-receiver');
 
-			s.select2('val', '');
 			// list of employees is dynamic
 			get_employees( function ( employees ) {
+				s.select2('data', null);
+				s.empty();
 				$.each( employees, function ( key, value ) {
 					if ( !value.last_name ) {
 						value.last_name = '';
