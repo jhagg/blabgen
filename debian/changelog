@@ -1,3 +1,11 @@
+blabgen (3.6-2) unstable; urgency=medium
+
+  * comparison with two dates was wrong
+  * receiver list now emptied, no more duplicates
+  * updated select2 to version 3.4.8
+
+ -- Jörgen Hägg <jh@axis.com>  Fri, 09 May 2014 12:42:05 +0200
+
 blabgen (3.6-1) unstable; urgency=medium
 
   * added colour adjustment for camera picture 
