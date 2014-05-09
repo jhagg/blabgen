@@ -202,8 +202,7 @@ screen-receiver input {
 					<span id="none-match" style="display: none;" class="translatable">
 						No matches.
 					</span>
-					<select multiple size="25"
-						id="data-receiver"
+					<select multiple id="data-receiver"
 						name="receiver">
 					</select>
 				</div>
