@@ -119,7 +119,7 @@ screen-receiver input {
 				</div>
 				<div>
 					<label for="data-parking" class="label2 translatable">
-						Your parking (or leave blank)
+						Axis parking only (or leave blank)
 					</label>
 					<input id="data-parking" type="text" name="parking" value=""/>
 				</div>

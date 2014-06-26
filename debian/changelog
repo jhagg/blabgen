@@ -1,8 +1,16 @@
-blabgen (3.6-2) unstable; urgency=medium
+blabgen (3.8-2) unstable; urgency=medium
+
+  * added swedish conversion of parking row
+  * updated the manual with po2json location
+
+ -- Jörgen Hägg <jh@axis.com>  Fri, 09 May 2014 13:14:40 +0200
+
+blabgen (3.7-1) unstable; urgency=medium
 
   * comparison with two dates was wrong
   * receiver list now emptied, no more duplicates
   * updated select2 to version 3.4.8
+  * forced screen resolution to 1024x768 with xrandr
 
  -- Jörgen Hägg <jh@axis.com>  Fri, 09 May 2014 12:42:05 +0200
 

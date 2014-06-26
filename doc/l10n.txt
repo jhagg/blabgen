@@ -12,6 +12,8 @@ format that is used by Gettext.js:
 
 	> po2json messages.po > messages.json
 
+Recommended tool is po2json in the perl module Locale-Simple at cpan.org.
+
 Default language is English. All original message strings are defined in the
 HTML source of the UI (index.html). Translatable message strings are tagged
 using the class 'translatable' on the containing element. HTML markup is
