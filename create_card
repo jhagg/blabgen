@@ -17,11 +17,11 @@ my $label_nr = 0;
 my ($company, $pr_queue, $name, $date, $pict_file, $output_file,
 	$show_pict, $no_utf8);
 # There should be a module for all this file testing...
-my $config = '/etc/blabgen/config.ini';
+my $config = $ENV{'BLABGEN_ETC'}.'/config.ini';
 $config = '../../conf/config.ini' if -r '../../conf/config.ini'; # for debug
 $config = 'conf/config.ini' if -r 'conf/config.ini'; # for debug
 
-my $local_conf = '/etc/blabgen/local.ini';
+my $local_conf = $ENV{'BLABGEN_ETC'}.'/local.ini';
 $local_conf = '../../conf/local.ini' if -r '../../conf/local.ini'; # for debug
 $local_conf = 'conf/local.ini' if -r 'conf/local.ini'; # for debug
 
