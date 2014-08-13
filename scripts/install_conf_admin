@@ -5,6 +5,6 @@ $sect = $1 if /^\[(\w+)\]$/;
 s!\.\.!/var/cache/blabgen! if $sect eq 'picture' && /^\s*dir\b/;
 s!=\s*!= /! if $sect eq 'picture' && /^\s*cgi\b/;
 
-s!'.* \./!'/usr/share/blabgen/! if $sect eq 'printer' && /^\s*cmd\b/;
+s!'.* \./!'/var/www/blabgen/! if $sect eq 'printer' && /^\s*cmd\b/;
 
 s!=\s*!= /admin/! if $sect eq 'reprint' && /^\s*cgi\b/;

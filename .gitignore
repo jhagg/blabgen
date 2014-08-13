@@ -15,3 +15,5 @@
 /conf/local_admin.ini
 /conf/host-*.ini
 !/conf/host-example.ini
+
+/ansible/hosts

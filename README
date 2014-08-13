@@ -1,6 +1,14 @@
 Blabgen
 =======
 
+2014-06-26
+
+Changing installation from Debian to Ansible.
+The debian directory is still there, but might
+not be in synk with the ansible directory.
+Sorry about that.
+
+
 2012-05-08
 
 A system to let visitors register their visit, take a picture of themselves and
