@@ -12,12 +12,12 @@ use CGI qw(-nosticky :standard start_table);
 use CGI::Carp;
 use Sys::Syslog;
 
-my $config = '/etc/blabgen/config.ini';
+my $config = $ENV{'BLABGEN_ETC'}.'/config.ini';
 $config = '../conf/config.ini' if -r '../conf/config.ini'; # for debug
 $config = 'conf/config.ini' if -r 'conf/config.ini'; # for debug
 die "no config file" unless -r $config;
 
-my $local_conf = '/etc/blabgen/local.ini';
+my $local_conf = $ENV{'BLABGEN_ETC'}.'/local.ini';
 $local_conf = '../conf/local.ini'
 	if -r '../conf/local.ini'; # for debug
 $local_conf = 'conf/local.ini' if -r 'conf/local.ini'; # for debug
@@ -366,7 +366,7 @@ sub emerg_table {
 	# Choose the order of the table:
 	my @plh;
 	my @date = Today();
-	my $cmd = "select id, name, company, from pers where ".
+	my $cmd = "select id, name, company from pers where ".
 		"date(enter_time) <= ? and date(leave_time) >= ? and ".
 		"status='act' order by name";
 	@plh = ($date_str, $date_str);
@@ -385,16 +385,22 @@ sub emerg_table {
 		$cmd = "select uname from visit where id=?";
 		my $sth2 = $dbh->prepare($cmd);
 		$sth2->execute($id);
-		my (@uname) = $sth2->fetchrow_array;
+		my @uname;
+		while (my ($u) = $sth2->fetchrow_array) {
+			push(@uname, $u);
+		}
 
-		$cmd = "select concat(name+' '+surname) ".
+		$cmd = "select concat(name, ' ', surname) ".
 			"from info where uname in (".
 			join(',', map { '?' } @uname).')';
 		my $sth3 = $dbh->prepare($cmd);
 		$sth3->execute(@uname);
-		my @rows = $sth3->fetchall_arrayref;
-		@rows = map { $_->[0] } @rows;
-		my $visit = join(', ', @rows);
+		my @rows;
+		while (my ($fullname) = $sth3->fetchrow_array) {
+			push(@rows, $fullname);
+		}
+
+		my $visit = join(', ', sort(@rows));
 
 		my $class = 'list_item list_item1';
 		$class .= ' list_current_item' if $id == $curr_id;

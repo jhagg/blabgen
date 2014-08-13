@@ -13,12 +13,12 @@ use CGI qw(:standard);
 use CGI::Carp;
 use Sys::Syslog;
 
-my $config = '/etc/blabgen/config.ini';
+my $config = $ENV{'BLABGEN_ETC'}.'/config.ini';
 $config = '../conf/config.ini' if -r '../conf/config.ini'; # for debug
 $config = 'conf/config.ini' if -r 'conf/config.ini'; # for debug
 die "no config file" unless -r $config;
 
-my $local_conf = '/etc/blabgen/local.ini';
+my $local_conf = $ENV{'BLABGEN_ETC'}.'/local.ini';
 $local_conf = '../conf/local.ini'
 	if -r '../conf/local.ini'; # for debug
 $local_conf = 'conf/local.ini' if -r 'conf/local.ini'; # for debug

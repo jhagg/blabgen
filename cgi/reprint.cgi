@@ -15,17 +15,17 @@ use Sys::Syslog;
 
 my $cgi = new CGI;
 
-my $config = '/etc/blabgen/config.ini';
+my $config = $ENV{'BLABGEN_ETC'}.'/config.ini';
 $config = '../conf/config.ini' if -r '../conf/config.ini'; # for debug
 
-my $lconfig = '/etc/blabgen/local.ini';
+my $lconfig = $ENV{'BLABGEN_ETC'}.'/local.ini';
 $lconfig = '../conf/local.ini'
 	if -r '../conf/local.ini'; # for debug
 
 my $iaddr = inet_aton($cgi->remote_addr);
 (my $host  = gethostbyaddr($iaddr, AF_INET)) =~ s/\..*//;
 
-my $hconfig = "/etc/blabgen/host-$host.ini";
+my $hconfig = $ENV{'BLABGEN_ETC'}."/host-$host.ini";
 $hconfig = "../conf/host-$host.ini" if -r "../conf/host-$host.ini"; # for debug
 
 die "no config file" unless -r $config;
