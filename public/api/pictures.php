@@ -12,7 +12,7 @@ require __DIR__ . '/../bootstrap.php';
  */
 function take_picture() {
 	$picture_dir = conf('picture.tmp_dir');
-	$curl_download_cmd = '/usr/bin/curl ';
+	$curl_download_cmd = '/usr/bin/curl -s ';
 	if (conf('cam.username')) {
 		$curl_download_cmd .= '-u "'.
 			conf('cam.username').':'.

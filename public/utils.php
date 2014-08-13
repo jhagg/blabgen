@@ -16,9 +16,14 @@ function conf($conf) {
 			$match)) {
 			$script = $match[1];
 		}
-		// local config overrides /etc/blabgen/
+		$etc_dir = getenv('BLABGEN_ETC');
+		if (!is_dir($etc_dir)) {
+			throw new Http_error( 500, "etc-dir $etc_dir missing");
+		}
+
+		// local config overrides {BLABGEN_ETC}/blabgen/
 		$opts_tmp = array();
-		$config = '/etc/blabgen/config.ini';
+		$config = $etc_dir.'/config.ini';
 		$dev_config = __DIR__.'/../conf/config.ini';
 		if (is_readable($dev_config)) {
 			$config = $dev_config;
@@ -27,7 +32,7 @@ function conf($conf) {
 		$debug[] .= sprintf( "Read config from '%s'", $config);
 
 		# global config that is local
-		$config = '/etc/blabgen/local.ini';
+		$config = $etc_dir.'/local.ini';
 		$dev_config = __DIR__.'/../conf/local.ini';
 		if (is_readable($dev_config)) {
 			$config = $dev_config;
@@ -40,7 +45,7 @@ function conf($conf) {
 
 		// some configuration depends on remote hostname
 		$hn = get_remote_hostname();
-		$config = '/etc/blabgen/host-'.$hn.'.ini';
+		$config = $etc_dir.'/host-'.$hn.'.ini';
 		$dev_config = __DIR__.'/../conf/host-'.$hn.'.ini';
 		if (is_readable($dev_config)) {
 			$config = $dev_config;
@@ -106,8 +111,28 @@ function log_msg( $prio, $msg ) {
  * Executes shell command.
  */
 function exec_cmd( $cmd ) {
+	$etc = getenv('BLABGEN_ETC');
+	putenv("BLABGEN_ETC=$etc");
+
+	$errfile = tempnam(conf('gen.tmp_dir'), 'exec');
+
 	log_msg( LOG_DEBUG, sprintf( 'Execing: %s', $cmd ) );
-	return exec( $cmd );
+	$output = [];
+	$ret_var = 0;
+	exec("$cmd 2>$errfile", $output, $ret_var);
+	$stdout = join(', ', $output);
+	if ($ret_var != 0) {
+		$fp = fopen($errfile, 'r');
+		$err_lines = [];
+		while (!feof($fp)) {
+			$err_lines[] = fgets($fp);
+		}
+		fclose($fp);
+		unlink($errfile);
+		$stderr = join(', ', $err_lines);
+		log_msg(LOG_DEBUG, sprintf('Error: code %d, err %s, out %s',
+			$ret_var, $stderr, $stdout));
+	}
 }
 
 // -- HTTP functions -- //

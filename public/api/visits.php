@@ -64,14 +64,14 @@ function save_visit($visit_data ) {
 	log_msg(LOG_DEBUG, 'inserting visit data: '.
 		implode('; ', $insert_data ).' ...');
 
-	$sql = "INSERT INTO pers
-		(name, company, enter_time, leave_time,
-			webhost, webkey, parking)
-		VALUES (?, ?, ?, ?, ?, ?, ?)";
+	$sql = 'INSERT INTO pers '.
+		'(name, company, enter_time, leave_time, '.
+			'webhost, webkey, parking) '.
+		'VALUES (?, ?, ?, ?, ?, ?, ?)';
 
 	$stmt = $db->prepare($sql);
 	if (!$stmt ) {
-		throw new Http_error(500, 'DB error');
+		throw new Http_error(500, 'DB error prepare: '.$sql);
 	}
 
 	$stmt->bind_param('sssssss',
@@ -81,14 +81,14 @@ function save_visit($visit_data ) {
 		$insert_data['parking']);
 	
 	if (!$stmt->execute()) {
-		throw new Http_error(500, 'DB error');
+		throw new Http_error(500, 'DB error exe');
 	}
 
 	$stmt->close();
 
 	$last_id = get_last_insert_id($db);
 	if (!$last_id ) {
-		throw new Http_error(500, 'DB error');
+		throw new Http_error(500, 'DB error last id');
 	}
 	$insert_data['id'] = $last_id;
 
@@ -97,11 +97,11 @@ function save_visit($visit_data ) {
 		$sql = 'INSERT INTO visit (id, uname) VALUES(?, ?)';
 		$stmt = $db->prepare($sql);
 		if (!$stmt ) {
-			throw new Http_error(500, 'DB error');
+			throw new Http_error(500, 'DB error prepare: '.$sql);
 		}
 		$stmt->bind_param('is', $last_id, $r['uname']);
 		if (!$stmt->execute()) {
-			throw new Http_error(500, 'DB error');
+			throw new Http_error(500, 'DB error exe 2');
 		}
 	}
 
@@ -301,16 +301,14 @@ function print_visitor_badge($visit_data ) {
 
 	$date = date('Y-m-d', $visit_data['end_date']);
 	$nr = $visit_data['id'];
+	$bin_dir = getenv('BLABGEN_BIN');
 
 	extract($visit_data);
-	$d = getcwd();
-	chdir('../../');
-	log_msg(LOG_DEBUG, getcwd());
-	$cmd = sprintf(conf('print.badge_cmd'), $picture_filename, $name,
+	$cmd = "$bin_dir/".conf('print.badge_cmd');
+	$cmd = sprintf($cmd, $picture_filename, $name,
 		$company, $nr, $date, conf('print.name'));
 	log_msg(LOG_DEBUG, "Print: $cmd");
 	exec_cmd($cmd);
-	chdir($d);
 }
 
 try {
