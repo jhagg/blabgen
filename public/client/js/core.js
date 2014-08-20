@@ -1,10 +1,13 @@
 /**
  * Visitor system core.
  */
-$(document).ready(function(){
 
 // global blabgen namespace root
 var visys = {};
+// change to 'console' when debugging
+var myconsole = {
+	log: function() {}
+};
 
 /**
  * Visitor system main state machine.
@@ -499,7 +502,7 @@ var visys = {};
 
 	/** Leavning 'date'. */
 	root.bind( 'date:leave', function () {
-		console.log( user_data.end_date );
+		log( user_data.end_date );
 	});
 
 	// RECEIVER SCREEN
@@ -1155,7 +1158,7 @@ var visys = {};
 		});
 		log( 'done updating ui ...' );
 	};
-})( visys, console.log, jQuery );
+})( visys, myconsole.log, jQuery );
 
 /**
  * Initializes visys state machine.
@@ -1251,5 +1254,4 @@ var visys = {};
 
 		visys.trigger('init');
 	});
-})( visys, console.log, jQuery );
-});
+})( visys, myconsole.log, jQuery );
