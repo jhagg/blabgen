@@ -1,0 +1,35 @@
+---
+ansible_sudo_user: root
+
+# user directory
+user_dir: /home/blabgen
+
+# for apache config & logs
+site_prefix: blabgen
+
+# fix for synchronize module
+sudo_opts: "sudo -u {{ansible_sudo_user}} rsync"
+
+# find the local git repos complete path
+local_repo_dir: "{{ lookup('pipe', 'git rev-parse --show-toplevel') }}"
+
+# where to clone the version to be installed
+export_dir: "{{local_repo_dir}}/.export_{{task_hosts}}"
+
+# this is true for prod servers only
+prod_host: false
+
+# parameters for apache config
+server_name: "{{site_prefix}}.{{ansible_fqdn}}"
+server_alias: ""
+server_admin: root@{{ansible_fqdn}}
+index_redirect: "eweb.{{ansible_fqdn}}"
+
+# the top dir for blabgen, NOT the document root
+blabgen_dir: /var/www/blabgen
+
+# the apache document root for blabgen
+document_root: "{{blabgen_dir}}/web"
+
+# remove admin dir, only on prod
+rm_admin_dir: 0

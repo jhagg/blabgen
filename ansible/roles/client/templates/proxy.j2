@@ -1,0 +1,4 @@
+{% if proxy_url is defined %}
+http_proxy={{proxy_url}} export http_proxy
+https_proxy={{proxy_url}} export https_proxy
+{% endif %}

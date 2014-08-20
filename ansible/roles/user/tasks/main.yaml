@@ -1,0 +1,11 @@
+---
+- name: install blabgen group
+  group: name=blabgen system=yes
+  tags:
+  - user
+
+- name: install blabgen user
+  user: name=blabgen system=yes shell=/bin/sh comment='blabgen home'
+    group=blabgen home=/home/blabgen
+  tags:
+  - user

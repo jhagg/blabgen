@@ -1,0 +1,14 @@
+---
+  ######################################
+  # try to guess what suffix the apache config should have. In
+  # 2.4 it must be .conf, previous no suffix
+- name: find apache suffix
+  shell: "if [ -d /etc/apache2/conf-available ]; then echo .conf;fi" 
+  register: a2_conf
+  always_run: yes
+  changed_when: false
+  tags:
+  - init
+  - config
+  - install
+

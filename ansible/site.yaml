@@ -1,0 +1,15 @@
+---
+- name: install blabgen
+  hosts: "{{server_hosts}}"
+  sudo: yes
+
+  roles:
+  - install
+# enable this if the blabgen user and group are not created
+#  - user
+
+- name: install blabgen client
+  hosts: "{{client_hosts}}"
+  sudo: yes
+  roles:
+  - client

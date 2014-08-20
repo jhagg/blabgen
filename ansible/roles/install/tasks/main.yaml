@@ -1,0 +1,119 @@
+---
+- name: required packages
+  apt: name={{item}}
+  with_items:
+  - perl-modules
+  - libdbd-mysql-perl
+  - libmime-lite-perl
+  - libstring-random-perl
+  - curl
+  - cups-client
+  - imagemagick
+  - libapache2-mod-php5
+  - php5-mysql
+  - php5-imap
+  - libimager-perl
+  - libconfig-inifiles-perl
+  - qrencode
+  - fonts-freefont-ttf
+  - libdate-calc-perl
+  - libjs-jquery
+  - rsyslog
+  tags:
+  - install
+
+  ######################################
+- name: create dirs
+  file: state=directory path={{item}}
+  with_items:
+  - /var/www/blabgen/web
+  - /var/www/blabgen/etc
+  - /var/www/blabgen/bin
+  tags:
+  - install
+
+- name: create temp dirs
+  file: state=directory path={{item}} mode=0775
+  with_items:
+  - /var/cache/blabgen
+  - /var/cache/blabgen/pictures_tmp
+  - /var/cache/blabgen/pictures
+  - /var/cache/blabgen/tmp
+  - /var/log/blabgen
+  tags:
+  - install
+
+  ######################################
+- name: link apache config
+  file: src={{blabgen_dir}}/etc/apache.conf state=link force=yes
+    dest=/etc/apache2/sites-available/blabgen{{a2_conf.stdout}}
+  tags:
+  - install
+
+
+  ######################################
+- name: install dirs
+  copy: src=../{{item.src}} dest={{blabgen_dir}}/{{item.dst}}
+  with_items:
+  - src: public/api
+    dst: web
+  - src: public/client
+    dst: web
+
+  - src: cgi/css
+    dst: web/admin
+
+  tags:
+  - install
+  ######################################
+- name: install files
+  copy: src=../{{item.src}} dest={{blabgen_dir}}/{{item.dst}}
+  with_items:
+  - src: conf/config.ini
+    dst: etc
+
+  - src: public/utils.php
+    dst: web
+  - src: public/visit_test.html
+    dst: web
+  - src: public/bootstrap.php
+    dst: web
+
+  - src: card/background.png
+    dst: etc
+  - src: card/default.png
+    dst: etc
+  - src: card/white.png
+    dst: etc
+
+  tags:
+  - install
+  ######################################
+- name: install cgi programs
+  copy: src=../{{item.src}} dest={{blabgen_dir}}/{{item.dst}} mode=0755
+  with_items:
+  - src: cgi/list.cgi
+    dst: web/admin
+  - src: cgi/reprint.cgi
+    dst: web/admin
+  - src: cgi/show_picture.cgi
+    dst: web
+
+  tags:
+  - install
+  ######################################
+- name: install syslog config
+  template: src=../syslog/blabgen.conf dest=/etc/rsyslog.d/blabgen.conf
+  tags:
+  - install
+  - rsyslog
+
+  ######################################
+- name: install programs
+  copy: src=../{{item}} dest={{blabgen_dir}}/bin mode=0755
+  with_items:
+  - clean_picture_dir
+  - create_card
+
+  tags:
+  - install

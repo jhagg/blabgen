@@ -1,0 +1,11 @@
+---
+- name: setup export directory
+  local_action: file path={{local_repo_dir}} state=directory
+  tags:
+  - git_export
+
+- name: export from git
+  local_action: git repo=file://{{local_repo_dir}}
+    version={{exp_branch}} dest={{export_dir}}
+  tags:
+  - git_export

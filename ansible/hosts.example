@@ -1,0 +1,21 @@
+# for development only
+[local]
+localhost
+
+# test server
+[test]
+server1
+
+# test clients
+[test_clients]
+client1
+client2
+
+# prod server
+[prod]
+server2
+
+# prod clients
+[prod_clients]
+client3
+client4

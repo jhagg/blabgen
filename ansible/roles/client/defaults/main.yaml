@@ -1,0 +1,6 @@
+# proxy dest
+# proxy_url: http://proxy.example.com:1234/
+
+# blabgen server name
+# blabgen_server: blabgen.example.org
+

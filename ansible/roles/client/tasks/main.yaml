@@ -1,0 +1,43 @@
+---
+- name: required packages
+  apt: name={{item}}
+  with_items:
+  - xscreensaver
+  - xscreensaver-gl
+  - xscreensaver-gl-extra
+  - miscfiles
+  - lightdm
+  - fluxbox
+  - xserver-xorg
+  - iceweasel
+  - x11-xserver-utils
+  tags:
+  - client
+
+- name: config lightdm
+  lineinfile: dest=/etc/lightdm/lightdm.conf
+    insertafter='^\[SeatDefaults\]' line='{{item}}'
+  with_items:
+  - autologin-user=blabgen
+  - autologin-user-timeout=5
+  tags:
+  - client
+
+- name: copy user files
+  copy: src=../{{item.src}} dest={{user_dir}}/{{item.dst}}
+  with_items:
+  - src: client/.xsession
+    dst: .xsession
+  tags:
+  - client
+
+- name: setup server name
+  template: src=url.j2 dest={{user_dir}}/url
+  tags:
+  - client
+
+- name: setup proxy vars
+  template: src=proxy.j2 dest={{user_dir}}/proxy
+  tags:
+  - client
+
