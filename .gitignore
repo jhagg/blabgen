@@ -17,3 +17,4 @@
 !/conf/host-example.ini
 
 /ansible/hosts
+/junk
