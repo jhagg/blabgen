@@ -1,3 +1,13 @@
+blabgen (4.0-1) unstable; urgency=medium
+
+  * new release
+  * added Parking entry
+  * faster people selector (using Select2)
+  * switched to Ansible installation (sorry, was forced to)
+  * many bugfixes
+
+ -- Jörgen Hägg <jh@axis.com>  Wed, 20 Aug 2014 12:48:14 +0200
+
 blabgen (3.8-2) unstable; urgency=medium
 
   * added swedish conversion of parking row
