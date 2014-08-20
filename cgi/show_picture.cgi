@@ -5,7 +5,6 @@ use vars qw($debug $verbose);
 use strict;
 use File::Path;
 use Config::IniFiles;
-use Log::Dlog qw(dconfess set_log dlog);
 use Carp;
 use POSIX;
 use DBI;
