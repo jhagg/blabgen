@@ -23,11 +23,18 @@
   tags:
   - client
 
+- name: create dirs
+  file: path={{item}} state=directory
+  with_items:
+  - "{{user_dir}}/.fluxbox"
+
 - name: copy user files
   copy: src=../{{item.src}} dest={{user_dir}}/{{item.dst}}
   with_items:
   - src: client/.xsession
     dst: .xsession
+  - src: client/.fluxbox/keys
+    dst: .fluxbox/keys
   tags:
   - client
 
@@ -41,3 +48,13 @@
   tags:
   - client
 
+- name: copy check daemon
+  copy: src=../check_kiosk dest=/usr/local/sbin mode=0755
+  tags:
+  - client
+
+- name: start check daemon
+  cron: job=/usr/local/sbin/check_kiosk minute=*/10 user=root
+    cron_file=blabgen name='blabgen kiosk watchdog'
+  tags:
+  - client

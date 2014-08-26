@@ -1,0 +1,37 @@
+#!/bin/sh
+
+logfile=/var/log/check_kiosk.log
+lockfile=/var/run/check_kiosk.pid
+
+touch $logfile
+########################
+
+find_icew() {
+	ps cax|grep icew|sed 's/.* //'
+}
+
+check_lock() {
+	if [ -e $lockfile ]; then
+		pid=`cat $lockfile`
+		if kill -0 $pid; then
+			# process still running
+			exit 0
+		fi
+	fi
+	echo $$ > $lockfile
+}
+
+########################
+
+check_lock
+
+while true; do
+	if [ "`find_icew`" = iceweasel ]; then
+		sleep 10
+		continue
+	fi
+
+	/usr/sbin/service lightdm restart
+	date '+%F %T kiosk restarted' >> $logfile
+	sleep 20
+done
