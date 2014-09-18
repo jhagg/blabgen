@@ -74,8 +74,6 @@
 
   - src: public/utils.php
     dst: web
-  - src: public/visit_test.html
-    dst: web
   - src: public/bootstrap.php
     dst: web
 
