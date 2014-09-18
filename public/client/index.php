@@ -68,7 +68,7 @@ screen-receiver input {
 	<header>
 		<div class="branding">
 			<h2 class="company_name">
-				Axis Communications AB
+				<!--Axis Communications AB -->
 			</h2>
 		</div>
 		<ul class="langs">
