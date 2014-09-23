@@ -34,7 +34,7 @@ while true; do
 	fi
 
 	# this cron job runs as a non-root, change here if necessary
-	sudo /usr/sbin/service lightdm restart
+	{{sudo_cmd}} /usr/sbin/service lightdm restart
 	date '+%F %T kiosk restarted' >> $logfile
 	sleep 20
 done

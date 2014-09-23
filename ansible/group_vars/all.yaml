@@ -33,3 +33,6 @@ document_root: "{{blabgen_dir}}/web"
 
 # remove admin dir, only on prod
 rm_admin_dir: 0
+
+# for hosts without root access, set this to 'sudo'
+sudo_cmd: ''
