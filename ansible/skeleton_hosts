@@ -1,0 +1,8 @@
+
+# copy this file to a 'hosts' file
+[servers]
+testserver1
+
+[clients]
+testclient1
+testclient2

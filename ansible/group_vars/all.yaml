@@ -1,5 +1,5 @@
 ---
-ansible_sudo_user: root
+my_sudo_user: root
 
 # user directory
 user_dir: /home/blabgen
@@ -8,7 +8,7 @@ user_dir: /home/blabgen
 site_prefix: blabgen
 
 # fix for synchronize module
-sudo_opts: "sudo -u {{ansible_sudo_user}} rsync"
+sudo_opts: "sudo -u {{my_sudo_user}} rsync"
 
 # find the local git repos complete path
 local_repo_dir: "{{ lookup('pipe', 'git rev-parse --show-toplevel') }}"
