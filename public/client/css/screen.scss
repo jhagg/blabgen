@@ -6,7 +6,7 @@ body {
 	background: #111;
 	font-family: normal_font;
 	margin-left: 16.5%;
-	margin-top: 2%;
+	margin-top: 5%;
 	margin-right: auto;
 }
 
@@ -529,8 +529,12 @@ input[type=text] {
 	color: #fff;
 	font-family: bold_font;
 }
-.ctrl .delete .btn {
+.ctrl .delete .btn-snap {
 	font-size: 13px;
+}
+
+.delete span{
+	color: #111;
 }
 p.delete,
 p.countdown {
