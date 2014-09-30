@@ -1,2 +1,0 @@
----
-- include: site.yaml server_hosts=test client_hosts=test_clients

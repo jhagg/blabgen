@@ -1,6 +1,7 @@
 ---
 - name: install blabgen
-  hosts: "{{server_hosts}}"
+  hosts: servers
+  sudo_user: "{{my_sudo_user}}"
   sudo: yes
 
   roles:
@@ -9,7 +10,8 @@
 #  - user
 
 - name: install blabgen client
-  hosts: "{{client_hosts}}"
+  hosts: clients
+  sudo_user: "{{my_sudo_user}}"
   sudo: yes
   roles:
   - client

@@ -1,0 +1,10 @@
+[servers]
+server1
+
+[clients]
+client1
+client2
+
+[prodhosts:children]
+servers
+clients

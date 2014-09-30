@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# change the sudo row if this cron job is running as root
+#
+# This job runs daily for restarting the GUI
+# to minimize any memory problems and to
+# ensure that the newest version is used.
+
+logfile=/home/blabgen/log/daily_adm.log
+
+touch $logfile
+########################
+
+# this cron job runs as a non-root, change here if necessary
+{{sudo_cmd}} /usr/sbin/service lightdm restart
+date '+%F %T kiosk restarted' >> $logfile
