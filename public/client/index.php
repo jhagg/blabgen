@@ -134,7 +134,7 @@ screen-receiver input {
 
 			<ul class="dates">
 				<li>
-					<a class="btn">
+					<a class="btn-date">
 						<strong class="wkd translatable">
 							Monday
 						</strong>
@@ -145,7 +145,7 @@ screen-receiver input {
 					</a>
 				</li>
 				<li>
-					<a class="btn">
+					<a class="btn-date">
 						<strong class="wkd translatable">
 							Tuesday
 						</strong>
@@ -156,7 +156,7 @@ screen-receiver input {
 					</a>
 				</li>
 				<li>
-					<a class="btn">
+					<a class="btn-date">
 						<strong class="wkd translatable">
 							Wednesday
 						</strong>
@@ -167,7 +167,7 @@ screen-receiver input {
 					</a>
 				</li>
 				<li>
-					<a class="btn">
+					<a class="btn-date">
 						<strong class="wkd translatable">
 							Thursday
 						</strong>
@@ -178,7 +178,7 @@ screen-receiver input {
 					</a>
 				</li>
 				<li>
-					<a class="btn">
+					<a class="btn-date">
 						<strong class="wkd translatable">
 							Friday
 						</strong>
@@ -216,13 +216,13 @@ screen-receiver input {
 			</h1>
 			<form action="#">
 				<p class="cam-ctrl">
-					<a class="btn up" id='cam-up'>
+					<a class="btn-arrow up" id='cam-up'>
 						↑	
 					</a>
 					<span class="translatable">
 						Adjust camera
 					</span>
-					<a class="btn down" id='cam-down'>
+					<a class="btn-arrow down" id='cam-down'>
 						↓
 					</a>
 				</p>
@@ -232,7 +232,7 @@ screen-receiver input {
 					</div>
 					<div class="ctrl">
 						<p class="snap">
-							<a class="btn btn-snap translatable">
+							<a class="btn-snap translatable">
 								Take picture
 							</a>
 						</p>
