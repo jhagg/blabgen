@@ -111,7 +111,7 @@ a:active {
 
 /** selected and hovering are identical 
 */
-.btn-date:not(.disabled):hover {
+.btn-date:not(.disabled):hover, .btn-arrow:not(.disabled):hover {
 	cursor: pointer;
 }
 .btn-date.selected,
@@ -506,9 +506,9 @@ input[type=text] {
 	overflow: hidden;
 	top: 10px;
 	left: 0;
-	left: 73px;
+	left: 110px;
 	/*width: 420px;*/
-	width: 280px;
+	width: 195px;
 	height: 315px;
 	margin: 3.8% auto;
 	border: 10px solid #fff;
@@ -516,7 +516,7 @@ input[type=text] {
 	background: #f00;
 }
 .video img {
-	margin-left: -60px;
+	margin-left: -190px;
 }
 
 /* status/delete picture */
@@ -574,7 +574,7 @@ p.delete {
 .snap .btn-snap {
 	font-size: 18px;
 	margin-top: 20px;
-	padding: 5px 18px 3px 18px;
+	padding: 5px 18px 5px 18px;
 	-moz-border-image: url(images/btn-gray-dark.png) 10 / 10px stretch stretch;
 }
 
@@ -598,7 +598,7 @@ p.delete {
 }
 .cam-ctrl .btn-arrow {
 	font-size: 32px;
-	padding: 0px 16px 5px 16px;
+	padding: 5px 16px 10px 16px;
 	font-weight: normal;
 }
 
