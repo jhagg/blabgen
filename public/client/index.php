@@ -228,7 +228,7 @@ screen-receiver input {
 				</p>
 				<div class="video-w">
 					<div class="video">
-					<img src='<?php echo $video_feed_url ?>' alt='' width='420' height='315' id='picture-img' data-video-src='<?php echo $video_feed_url ?>' />
+					<img src='<?php echo $video_feed_url ?>' alt='' height='315' id='picture-img' data-video-src='<?php echo $video_feed_url ?>' />
 					</div>
 					<div class="ctrl">
 						<p class="snap">
