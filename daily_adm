@@ -15,6 +15,7 @@ touch $logfile
 {{sudo_cmd}} /usr/sbin/service lightdm stop
 sleep 1
 {{sudo_cmd}} /usr/bin/killall --exact Xorg || true
+{{sudo_cmd}} /usr/bin/killall --exact lightdm || true
 sleep 1
 {{sudo_cmd}} /usr/sbin/service lightdm start
 date '+%F %T kiosk restarted' >> $logfile
