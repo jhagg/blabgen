@@ -117,9 +117,9 @@ screen-receiver input {
 					</label>
 					<input id="data-company" type="text" name="company" value=""/>
 				</div>
-				<div>
+				<div id="parking">
 					<label for="data-parking" class="label2 translatable">
-						Axis parking only (or leave blank)
+						Axis visitors parking - please enter the registrations number (or leave blank)
 					</label>
 					<input id="data-parking" type="text" name="parking" value=""/>
 				</div>
@@ -379,15 +379,6 @@ endif;
 </div>
 <!-- / doc -->
 
-<script>
-$(document).ready(function(){
-var blab_config = {
-	'ui': {
-		'parking_available': <? print conf('ui.parking_available'); ?>
-	}
-};
-});
-</script>
 
 <script src="js/jquery-1.10.2.min.js"></script>
 <script src="js/jquery-ui-1.10.3.custom.min.js"></script>
@@ -399,6 +390,24 @@ var blab_config = {
 
 <script src="js/gettext.js"></script>
 <script src="js/core.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	var blab_config = {
+		'ui': {
+			'parking_available': <? print conf('ui.parking_available'); ?>
+		}
+	};
+
+if(blab_config.ui.parking_available){
+	$('#parking').show();	
+}
+else {
+	$('#parking').hide();
+}
+
+});
+</script>
+
 
 </body>
 </html>

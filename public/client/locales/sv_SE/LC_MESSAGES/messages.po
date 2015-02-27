@@ -26,8 +26,8 @@ msgstr "Ditt namn"
 msgid "Your company (or leave blank)"
 msgstr "Ditt företag (eller lämna blankt)"
 
-msgid "Axis parking only (or leave blank)"
-msgstr "Parkering hos Axis (eller lämna blankt)"
+msgid "Axis visitors parking - please enter the registrations number(or leave blank)"
+msgstr "Axis besöksparkering - vänligen skriv in bilens registreringsnummer (eller lämna blankt)"
 
 msgid "Your last day of visit"
 msgstr "Sista datum för besök"
