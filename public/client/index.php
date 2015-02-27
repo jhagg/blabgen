@@ -379,6 +379,15 @@ endif;
 </div>
 <!-- / doc -->
 
+<script>
+$(document).ready(function(){
+var blab_config = {
+	'ui': {
+		'parking_available': <? print conf('ui.parking_available'); ?>
+	}
+};
+});
+</script>
 
 <script src="js/jquery-1.10.2.min.js"></script>
 <script src="js/jquery-ui-1.10.3.custom.min.js"></script>

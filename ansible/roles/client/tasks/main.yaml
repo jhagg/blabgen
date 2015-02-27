@@ -30,6 +30,8 @@
   - "{{user_dir}}/bin"
   - "{{user_dir}}/log"
   - "{{user_dir}}/run"
+  tags:
+  - client
 
 - name: copy user files
   copy: src=../{{item.src}} dest={{user_dir}}/{{item.dst}}
