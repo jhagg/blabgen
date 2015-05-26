@@ -38,15 +38,6 @@ my $cgi = new CGI;
 ######################################################################
 my $myurl = $cgi->url;
 
-print header(-charset => 'utf-8');
-print start_html(-title => 'Visitors of Axis', -encoding => 'utf-8',
-	-script => [
-			{ -type => 'javascript',
-			-src => '/javascript/jquery/jquery.min.js' },
-			{ -type => 'javascript', -src => 'list.js' },
-		],
-	-style => { -src => 'css/list.css' });
-
 ######################################################################
 my @show_date;
 if (my $use_date = $cgi->param('date')) {
@@ -85,6 +76,30 @@ $dbh->do('set character set utf8');
 my $curr_id;
 my @leave = grep(/^leave_/, $cgi->param);
 my $leave_id;
+if (my $id = $cgi->param('goto_id')) {
+	$curr_id = $id;
+	my $cmd = "select date_format(enter_time, '%Y-%m-%d') ".
+		"from pers where id = ?";
+	my $sth = $dbh->prepare($cmd);
+	$sth->execute($curr_id);
+	($date_str) = $sth->fetchrow_array;
+	@show_date = split(/-/, $date_str);
+}
+if ($cgi->param('find')) {
+	$curr_id = $cgi->param('curr_id');
+	if (my ($id) = $curr_id =~ /^lv(\d+)/) {
+		push(@leave, $id);
+		$curr_id = $id;
+		$cgi->param('curr_id', '');
+		$cgi->param('goto_id', $id);
+	}
+	my $cmd = "select date_format(enter_time, '%Y-%m-%d') ".
+		"from pers where id = ?";
+	my $sth = $dbh->prepare($cmd);
+	$sth->execute($curr_id);
+	($date_str) = $sth->fetchrow_array;
+	@show_date = split(/-/, $date_str);
+}
 # only use the first leave id, there should never be more than one
 if (@leave) {
 	($leave_id = $leave[0]) =~ s/^leave_//;
@@ -92,17 +107,19 @@ if (@leave) {
 	my $cmd = "update pers set status = 'fin', leave_time = now() ".
 		"where id = ? and status = 'act'";
 	$dbh->do($cmd, undef, $leave_id);
+	$cgi->delete('find', 'curr_id');
+	print $cgi->redirect($cgi->self_url);
+	exit;
 }
-if ($cgi->param('find')) {
-	$curr_id = $cgi->param('curr_id');
-	my $cmd = "select date_format(enter_time, '%Y-%m-%d') ".
-		"from pers where id = ?";
-	my $sth = $dbh->prepare($cmd);
-	$sth->execute($curr_id);
-	($date_str) = $sth->fetchrow_array;
-	@show_date = split(/-/, $date_str);
 
-}
+print header(-charset => 'utf-8');
+print start_html(-title => 'Visitors of Axis', -encoding => 'utf-8',
+	-script => [
+			{ -type => 'javascript',
+			-src => '/javascript/jquery/jquery.min.js' },
+			{ -type => 'javascript', -src => 'list.js' },
+		],
+	-style => { -src => 'css/list.css' });
 
 ######################################################################
 $cgi->param('date', $date_str);
@@ -207,7 +224,7 @@ sub update_box {
 			('Enter id'),
 		td({-class => 'update_item update_upper_item'},
 			textfield(-name => 'curr_id',
-				-size => 7, -maxlength => 7)));
+				-size => 7, -maxlength => 10)));
 	$s .= Tr(
 		td{-class => 'update_item', -colspan => 2, -align => 'center'},
 			submit(-name => 'find', -value => 'Find')
