@@ -224,6 +224,7 @@ sub update_box {
 			('Enter id'),
 		td({-class => 'update_item update_upper_item'},
 			textfield(-name => 'curr_id',
+				-autofocus => undef,
 				-size => 7, -maxlength => 10)));
 	$s .= Tr(
 		td{-class => 'update_item', -colspan => 2, -align => 'center'},
