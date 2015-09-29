@@ -197,11 +197,15 @@ var myconsole = {
 		$('#data-parking').val('');
 		$('#data-receiver').val('');
 
+		$('.nav .delete').hide();
+
 		visited_screens = {};
 		current_screen = null;
 		front_screen = null;
 		//root.set_locale( conf.default_locale );
 		user_data = $.extend( {}, empty_user_data );
+
+
 	};
 
 	/** Blocks UI. */
@@ -664,6 +668,8 @@ var myconsole = {
 		$('.screen-photo p.snap').hide('slide', { direction: 'down' }, 500);
 		$('.countdown span').hide();
 		$('.countdown').show();
+		$('.abort').hide('slide', { direction: 'down' }, 500);
+
 		$('.countdown span:nth-child(1)').show();
 		setTimeout( function() { $('.countdown span:nth-child(2)').show(); }, 1000 );
 		setTimeout( function() { $('.countdown span:nth-child(3)').show(); }, 2000 );
@@ -695,7 +701,9 @@ var myconsole = {
 					user_data.picture_url = url;
 
 					$('.countdown').hide();
-					$('.ctrl .delete').show();
+					$('.nav .delete').show();
+					$('.abort').show();
+
 					root.enable(root.nb());
 					root.enable(root.pb());
 					root.pb().click( function () {
@@ -794,6 +802,7 @@ var myconsole = {
 			var kc = e.keyCode ? e.keyCode : e.which;
 			log( 'keypress: ' + kc + ' ...' );
 			root.trigger('done');
+
 		});
 	});
 
@@ -1193,7 +1202,7 @@ var myconsole = {
 		});
 
 		/** Delete photo button removes current photo. */
-		$('.screen-photo a.btn-delete').click( function() {
+		$('.nav a.btn-delete').click( function() {
 			visys.trigger('delete-photo');
 			return false;
 		});

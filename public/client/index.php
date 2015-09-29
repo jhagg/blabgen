@@ -214,6 +214,13 @@ screen-receiver input {
 			<h1 class="translatable screen-title">
 				Your picture
 			</h1>
+			<div class = "countdown">
+				<p class="countdown">
+					<span>3</span>
+					<span>2</span>
+					<span>1</span>
+				</p>
+			</div>
 			<form action="#">
 				<p class="cam-ctrl">
 					<a class="btn-arrow up" id='cam-up'>
@@ -234,17 +241,6 @@ screen-receiver input {
 						<p class="snap">
 							<a class="btn-snap translatable">
 								Take picture
-							</a>
-						</p>
-						<p class="countdown">
-							<span>3</span>
-							<span>2</span>
-							<span>1</span>
-						</p>
-						<p class="delete">
-							<span class="translatable">Not OK?</span>
-							<a class="btn delete btn-delete translatable">
-								Delete picture
 							</a>
 						</p>
 					</div>
@@ -302,6 +298,12 @@ endif;
 				<a class="btn abort translatable">
 					Cancel
 				</a>
+			</li>
+			<li class="delete">
+				<p class="translatable">Not OK?</p>
+					<a class="btn delete btn-delete translatable">
+					Delete picture
+					</a>
 			</li>
 			<li class="prev">
 				<a class="btn translatable">

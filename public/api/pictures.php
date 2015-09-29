@@ -38,15 +38,18 @@ function take_picture() {
 	do {
 		$fn = md5( microtime() . '.' .  mt_rand() ) . '.jpg';
 		$fname = path_join( $picture_dir, $fn );
+		// download image from camera
+		$cmd = sprintf( $curl_download_cmd, conf('cam.picture_url'), $fname );
+		exec_cmd( $cmd );
 		$tries++;
 	} while ( !is_readable( $fname ) && $tries < $max_tries );
 
-	// download image from camera
-	$cmd = sprintf( $curl_download_cmd, conf('cam.picture_url'), $fname );
-	exec_cmd( $cmd );
+	
+	
 
 	if ( !is_readable( $fname ) ) {
 		throw new Http_error( 500, 'Failed to download picture file' );
+
 	}
 
 	$url = sprintf( conf('picture.tmp_url_template'), basename( $fname ) );

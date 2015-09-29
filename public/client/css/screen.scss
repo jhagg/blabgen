@@ -30,9 +30,6 @@ footer {
 header {
 	height: 100px;
 	width: 1024px;
-	/*position: absolute;*/
-	/*top: 0;*/
-	/*left: 0;*/
 }
 
 ul {
@@ -80,7 +77,8 @@ a:active {
 }
 
 .btn.abort,
-.btn.delete {
+.btn-delete {
+	display: inline-block;
 	text-shadow: #000 0 -1px 0;
 	-moz-border-image: url(images/btn-red.png) 20 / 20px stretch stretch;
 	color: #fff;
@@ -300,6 +298,12 @@ section.main {
 	bottom: 0;
 	left: 0;
 }
+.nav li.delete {
+	position: absolute;
+	bottom: 0;
+	left: 66px;
+	display: none;
+}
 .nav li.prev {
 	display: inline-block;
 	vertical-align: bottom;
@@ -484,7 +488,7 @@ input[type=text] {
  */
 .screen-photo h1 {
 	margin-top: 0;
-	margin-bottom: 30px;
+	margin-bottom: 0px;
 	font-size: 30px;
 	font-family: bold_font;
 	display: block;
@@ -492,7 +496,7 @@ input[type=text] {
 	margin-right:3%;
 }
 .video-w {
-	position: absolute;
+	position: relative;
 	top: 40px;
 	left: 50%;
 	margin-left: -244px;
@@ -533,19 +537,22 @@ input[type=text] {
 	font-size: 13px;
 }
 
-.delete span{
-	color: #111;
+.delete p{
+	text-align: center;
+	margin: 0;
+	font-size: 1.1em;
+	font-weight:bold;
 }
-p.delete,
-p.countdown {
+div.countdown {
+	margin: auto;
 	position: absolute;
-	right: 0;
+	right: 465px;
+}
+.screen-photo .countdown{
+	display: none;
 }
 p.countdown {
 	top: 5px;
-}
-p.delete {
-	top: 25px;
 }
 .countdown span {
 	position: absolute;
@@ -603,7 +610,6 @@ p.delete {
 }
 
 /* countdown timer and delete picture button */
-.ctrl .countdown,
 .ctrl .delete {
 	display: none;
 }
