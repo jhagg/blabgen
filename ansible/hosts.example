@@ -1,21 +1,16 @@
-# for development only
-[local]
-localhost
 
-# test server
-[test]
-server1
+# servers
+[servers]
+lutze
 
-# test clients
-[test_clients]
-client1
-client2
+# clients
+[clients]
+ronnie
+soak
+kaos
 
-# prod server
-[prod]
-server2
+# prod hosts, only for prod install
+[prodhosts:children]
+servers
+clients
 
-# prod clients
-[prod_clients]
-client3
-client4
