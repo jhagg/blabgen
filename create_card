@@ -170,6 +170,7 @@ close QR;
 # add QR-code
 my $qr = new Imager(file => $qr_file) || err(Imager->errstr);
 $qr = $qr->scale(xpixels => $qr_w);
+$qr = $qr->crop(width=>180, height=>180);
 my $qr_x = $img->getwidth-$qr->getwidth-tpx(1);
 my $qr_y = $img->getheight-$qr->getheight-tpx(1);
 $img->paste(left => $qr_x, top => $qr_y, img => $qr);
