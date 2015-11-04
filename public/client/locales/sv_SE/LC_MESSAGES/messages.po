@@ -113,6 +113,9 @@ msgstr "Din<br>bild"
 msgid "Pick up<br>your card"
 msgstr "Hämta kort<br>i receptionen"
 
+msgid "Please wait for your contact to come get you!"
+msgstr "Vänta på att din besöksmottagare kommer och hämtar dig!"
+
 msgid "Oops."
 msgstr "Ajdå."
 
