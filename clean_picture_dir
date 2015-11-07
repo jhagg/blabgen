@@ -7,22 +7,37 @@ use Mysql;
 use POSIX;
 use Carp;
 use Getopt::Long;
-use Blabgen::Dlog;
-use Blabgen::Common;
+use Config::IniFiles;
 use vars qw($debug $verbose);
 
-my ($cache_dir);
-my ($n_days);
-GetOptions('d+' => \$debug, 'v+' => \$verbose, 'n=i' => \$n_days);
+#########################################################
+# run this in /var/www/blabgen
+my $config = 'conf/config.ini' if -r 'conf/config.ini'; # for debug
+$config = 'etc/config.ini' if -r 'etc/config.ini';
 
-set_log('stdout' => 1);
+my $local_conf = 'conf/local.ini' if -r 'conf/local.ini'; # for debug
+$local_conf = 'etc/local.ini' if -r 'etc/local.ini';
 
-my $dbh = Mysql->connect(conf('db_host'), conf('db_db'),
-	conf('db_user'), conf('db_pwd'));
+my $config_obj = new Config::IniFiles(-file => $config);
+die "no config" unless $config_obj;
+if (-r $local_conf) {
+	$config_obj = new Config::IniFiles(-file => $local_conf,
+		-import => $config_obj);
+}
+
+sub conf { $config_obj->val(@_); }
+
+#########################################################
+GetOptions('d+' => \$debug, 'v+' => \$verbose);
+
+#########################################################
+my $dbh = Mysql->connect(conf('db', 'host'), conf('db', 'db'),
+	conf('db', 'user'), conf('db', 'pwd'));
 confess($Mysql::db_errstr) unless $dbh;
 
-my $cmd = "select id, name, unix_timestamp(enter) ".
-	"from pers where to_days(now())-to_days(enter) > ".conf('max_db_age');
+my $cmd = "select id, name, unix_timestamp(enter_time) ".
+	"from pers where to_days(now())-to_days(enter_time) > ".
+	conf('gen', 'max_db_age');
 my $sth = $dbh->query($cmd);
 my @delete;
 while (my @row = $sth->fetchrow()) {
@@ -30,26 +45,26 @@ while (my @row = $sth->fetchrow()) {
 }
 
 for my $id (@delete) {
-	dlog(1, "delete @$id");
+	print "delete @$id\n" if $verbose;
 	my $cmd = "delete from pers where id = $id->[0]";
-	dlog(1, $cmd);
+	print "$cmd\n" if $verbose;
 	$dbh->query($cmd) unless $debug;
 	my $cmd = "delete from visit where id = $id->[0]";
-	dlog(1, $cmd);
+	print "$cmd\n" if $verbose;
 	$dbh->query($cmd) unless $debug;
-	my $path = conf('picture_dir').
+	my $path = conf('picture', 'dir').
 		POSIX::strftime("/%Y-%m-%d/$id->[0].jpg", localtime($id->[2]));
 	next unless -e $path;
-	dlog(1, $path);
+	print "$path\n" if $verbose;
 	unlink($path) unless $debug;
 }
 
-my $cmd = "find ".conf('picture_dir')." -type f -mtime +".
-	conf('max_pict_age')." -name '*.jpg' | xargs rm -f ";
-dlog(1, $cmd);
+my $cmd = "find ".conf('picture', 'dir')." -type f -mtime +".
+	conf('gen', 'max_pict_age')." -name '*.jpg' | xargs rm -f ";
+print "$cmd\n" if $verbose;
 system($cmd) unless $debug;
 
-$cmd = "find ".conf('picture_dir')." -type d | ".
+$cmd = "find ".conf('picture', 'dir')." -type d | ".
 	"xargs rmdir --ignore-fail-on-non-empty";
-dlog(1, $cmd);
+print "$cmd\n" if $verbose;
 system($cmd) unless $debug;
