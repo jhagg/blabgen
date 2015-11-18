@@ -3,7 +3,7 @@
 
 use lib '.';			# <VISITOR_LIB>
 use strict;
-use Mysql;
+use DBI;
 use POSIX;
 use Carp;
 use Getopt::Long;
@@ -31,16 +31,17 @@ sub conf { $config_obj->val(@_); }
 GetOptions('d+' => \$debug, 'v+' => \$verbose);
 
 #########################################################
-my $dbh = Mysql->connect(conf('db', 'host'), conf('db', 'db'),
-	conf('db', 'user'), conf('db', 'pwd'));
-confess($Mysql::db_errstr) unless $dbh;
+my $dbh = DBI->connect('dbi:mysql:host='.conf('db', 'host').
+	';database='.conf('db', 'db'), conf('db', 'user'), conf('db', 'pwd'));
+confess($DBI::errstr) unless $dbh;
 
 my $cmd = "select id, name, unix_timestamp(enter_time) ".
 	"from pers where to_days(now())-to_days(enter_time) > ".
 	conf('gen', 'max_db_age');
-my $sth = $dbh->query($cmd);
+my $sth = $dbh->prepare($cmd);
+$sth->execute;
 my @delete;
-while (my @row = $sth->fetchrow()) {
+while (my @row = $sth->fetchrow_array()) {
 	push(@delete, [@row]);
 }
 
@@ -48,10 +49,10 @@ for my $id (@delete) {
 	print "delete @$id\n" if $verbose;
 	my $cmd = "delete from pers where id = $id->[0]";
 	print "$cmd\n" if $verbose;
-	$dbh->query($cmd) unless $debug;
+	$dbh->do($cmd) unless $debug;
 	my $cmd = "delete from visit where id = $id->[0]";
 	print "$cmd\n" if $verbose;
-	$dbh->query($cmd) unless $debug;
+	$dbh->do($cmd) unless $debug;
 	my $path = conf('picture', 'dir').
 		POSIX::strftime("/%Y-%m-%d/$id->[0].jpg", localtime($id->[2]));
 	next unless -e $path;
