@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# force empty cache
+rm -rf $HOME/.cache/mozilla/firefox/*
+
 # setup http_proxy & https_proxy if needed.
 # Mostly used to do first time setup of Firefox
 if [ -e $HOME/proxy.local ]; then
