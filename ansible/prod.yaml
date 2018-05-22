@@ -1,2 +1,2 @@
 ---
-- include: site.yaml server_hosts=prod client_hosts=prod_clients
+- import_playbook: site.yaml server_hosts=prod client_hosts=prod_clients

@@ -5,7 +5,7 @@
 - name: find apache suffix
   shell: "if [ -d /etc/apache2/conf-available ]; then echo .conf;fi" 
   register: a2_conf
-  always_run: yes
+  check_mode: no
   changed_when: false
   tags:
   - init

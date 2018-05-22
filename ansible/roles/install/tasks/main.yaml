@@ -33,13 +33,19 @@
   - install
 
 - name: create temp dirs
-  file: state=directory path={{item}} mode=0775
+  file: state=directory path={{item}} mode=02775
   with_items:
   - /var/cache/blabgen
+  - /var/log/blabgen
+  tags:
+  - install
+
+- name: create temp dirs 2
+  file: state=directory path={{item}} mode=0775
+  with_items:
   - /var/cache/blabgen/pictures_tmp
   - /var/cache/blabgen/pictures
   - /var/cache/blabgen/tmp
-  - /var/log/blabgen
   tags:
   - install
 

@@ -63,7 +63,7 @@ for my $id (@delete) {
 my $cmd = "find ".conf('picture', 'maindir')." -type f -mtime +".
 	conf('gen', 'max_pict_age').
 	" \\( -name '*.jpg' -o -name '*.jpeg' -o -name '*.png' ".
-	" -o 'exec*' \\) | xargs rm -f";
+	" -o -name 'exec*' \\) | xargs rm -f";
 print "$cmd\n" if $verbose;
 system($cmd) unless $debug;
 
