@@ -9,9 +9,10 @@
   - curl
   - cups-client
   - imagemagick
-  - libapache2-mod-php5
-  - php5-mysql
-  - php5-imap
+  - libapache2-mod-php7.0
+  - php7.0-mysql
+  - php7.0-imap
+  - php7.0-mbstring
   - libimager-perl
   - libconfig-inifiles-perl
   - qrencode

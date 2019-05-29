@@ -396,7 +396,7 @@ endif;
 $(document).ready(function(){
 	var blab_config = {
 		'ui': {
-			'parking_available': <? print conf('ui.parking_available'); ?>
+			'parking_available': <?php print conf('ui.parking_available'); ?>
 		}
 	};
 
