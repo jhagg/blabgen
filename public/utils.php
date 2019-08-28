@@ -9,7 +9,7 @@
  */
 function conf($conf) {
 	static $opts = null;
-
+	$debug = [];
 	if ( !$opts ) {
 		$script = 'blabgen unknown';
 		if (preg_match('!([^/]+)$!', $_SERVER['SCRIPT_FILENAME'],
@@ -60,7 +60,7 @@ function conf($conf) {
 		foreach ($debug as $d) {
 			log_msg(LOG_DEBUG, $d);
 		}
-#print "<pre>"; print_r($opts); print "</pre>"; 
+#print "<pre>"; print_r($opts); print "</pre>";
 #exit(0);
 	}
 
@@ -86,7 +86,7 @@ function get_remote_hostname() {
 
 /**
  * Joins two or more paths.
- * 
+ *
  * See http://stackoverflow.com/questions/1091107/how-to-join-filesystem-path-strings-in-php
  */
 function path_join() {
