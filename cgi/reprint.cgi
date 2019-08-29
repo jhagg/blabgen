@@ -80,7 +80,7 @@ unless (-e $path) {
 chdir('../..');
 
 my $printer = cnf('print.name');
-my $cmd = sprintf cnf('print.badge_cmd'), $path, $name, $company,
+my $cmd = sprintf "bin/".cnf('print.badge_cmd'), $path, $name, $company,
 	$id, $enter, $printer;
 
 do_system($cmd);
