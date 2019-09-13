@@ -1,16 +1,16 @@
 ---
 - name: required packages
-  apt: name={{item}}
-  with_items:
-  - xscreensaver
-  - xscreensaver-gl
-  - xscreensaver-gl-extra
-  - miscfiles
-  - lightdm
-  - fluxbox
-  - xserver-xorg
-  - iceweasel
-  - x11-xserver-utils
+  apt:
+    name:
+    - xscreensaver
+    - xscreensaver-gl
+    - xscreensaver-gl-extra
+    - miscfiles
+    - lightdm
+    - fluxbox
+    - xserver-xorg
+#    - iceweasel
+    - x11-xserver-utils
   tags:
   - client
 

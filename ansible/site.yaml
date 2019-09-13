@@ -1,7 +1,6 @@
 ---
 - name: install blabgen
   hosts: servers
-  become_user: "{{my_sudo_user}}"
   become: yes
 
   roles:
@@ -11,7 +10,6 @@
 
 - name: install blabgen client
   hosts: clients
-  become_user: "{{my_sudo_user}}"
   become: yes
   roles:
   - client
