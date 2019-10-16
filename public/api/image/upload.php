@@ -12,9 +12,9 @@ function uploadImage() {
   $imageFile = $_FILES["image"];
   $isImage = getimagesize($imageFile["tmp_name"]);
 
-	if ( !is_dir( $picture_dir ) ) {
-		mkdir( $picture_dir );
-	}
+  if ( !is_dir( $picture_dir ) ) {
+    mkdir( $picture_dir );
+  }
 
   if (!$imageFile) {
     http_response_code(400);
