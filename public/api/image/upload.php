@@ -7,10 +7,14 @@
 require __DIR__ . '/../../bootstrap.php';
 
 function uploadImage() {
-  $picture_dir = conf('picture.tmp_dir');
+  $picture_dir = conf('picture.dir');
   $targetFile = conf('picture.tmp_url_template');
   $imageFile = $_FILES["image"];
   $isImage = getimagesize($imageFile["tmp_name"]);
+
+	if ( !is_dir( $picture_dir ) ) {
+		mkdir( $picture_dir );
+	}
 
   if (!$imageFile) {
     http_response_code(400);
