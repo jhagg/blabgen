@@ -94,13 +94,13 @@ var myconsole = {
 		if ( events[event] && events[event][current_state] ) {
 			log( 'Found specific transition ...' );
 			r = events[event][current_state];
-		
+
 		// exists generic?
 		} else if ( events[event] && events[event]['*'] ) {
 			log( 'Found generic transition ...' );
 			r = events[event]['*'];
 		}
-		
+
 		// r[0] is callback, r[1] is to_state
 		if ( r ) {
 			// meta event: <current state>:leave
@@ -108,7 +108,7 @@ var myconsole = {
 				log( "Calling meta event '" + current_state + ":leave' ..." );
 				events[current_state + ':leave'].call( this );
 			}
-			
+
 			if ( r[0] ) {
 				args.shift();
 				r[0].apply( this, args );
@@ -149,7 +149,7 @@ var myconsole = {
 	var conf = root.conf;
 
 	/** Holds translation, if any. */
-	conf.translation_map = {}; 
+	conf.translation_map = {};
 
 	/** Default backend API URL. */
 	conf.api_base_url =
@@ -218,7 +218,7 @@ var myconsole = {
 			message: '<span>' + msg + '</span>',
 			fadeIn: 400,
 			fadeOut: 400
-		}); 
+		});
 	};
 
 	/** Unblocks UI. */
@@ -234,7 +234,7 @@ var myconsole = {
 	/** -- TRANSITION DEFINITIONS -- */
 
 	// INITIALIZATION
-	
+
 	/** Aborts registration process. */
 	root.bind( 'abort', '*', 'start', function() {
 		$('#flash').hide();
@@ -258,7 +258,7 @@ var myconsole = {
 	});
 
 	// START SCREEN
-	
+
 	/** enter 'start'. */
 	root.bind( 'start:enter', function () {
 		root.reset();
@@ -290,7 +290,7 @@ var myconsole = {
 		} else {
 			root.disable(root.nb());
 		}
-		
+
 		// when something has been entered, next button is enabled
 		$('#data-name').keyup( function () {
 			if ( $(this).val() ) {
@@ -381,7 +381,7 @@ var myconsole = {
 	});
 
 	// DATE SCREEN
-	
+
 	/** 'company' -> 'date' */
 	root.bind( 'next', 'company', 'date', function () {
 		user_data.company = $('#data-company').val();
@@ -488,11 +488,11 @@ var myconsole = {
 			// store selected date
 			log( 'Selected date ...' );
 			user_data.end_date = $(this).data('date');//.getTime();
-			user_data.end_date_index = $(this).data('index');	
+			user_data.end_date_index = $(this).data('index');
 			user_data.start_date = (new Date()).getTime();
 			update_list.call(undefined);
 		});
-		
+
 		// enter = to receiver screen
 		$(document).unbind('keypress').keypress( function ( e ) {
 			var kc = e.keyCode ? e.keyCode : e.which;
@@ -510,7 +510,7 @@ var myconsole = {
 	});
 
 	// RECEIVER SCREEN
-	
+
 	/** 'date' => 'receiver'. */
 	root.bind( 'next', 'date', 'receiver', function () {
 		var employees, s;
@@ -612,7 +612,7 @@ var myconsole = {
 	});
 
 	// PHOTO SCREEN
-	
+
 	/** 'receiver' => 'photo-take'. */
 	root.bind( 'next', 'receiver', 'photo-take', function () {
 		root.goto('photo', 'receiver');
@@ -638,9 +638,9 @@ var myconsole = {
 		root.nb().unbind('click');
 		root.disable( root.nb() );
 
-		$('.delete').hide('slide', { direction: 'down' }, 500);	
+		$('.delete').hide('slide', { direction: 'down' }, 500);
 		if ( !$('.screen-photo p.snap').is(':visible') ) {
-			$('.screen-photo p.snap').show('slide', { direction: 'down' }, 500);	
+			$('.screen-photo p.snap').show('slide', { direction: 'down' }, 500);
 		}
 		$('#picture-img').attr('src', $('#picture-img').data('video-src') );
 
@@ -650,7 +650,7 @@ var myconsole = {
 		user_data.picture_url = null;
 		root.disable( root.nb() );
 		root.nb().unbind('click');
-		
+
 		// enter = take photo
 		$(document).unbind('keypress').keypress( function ( e ) {
 			var kc = e.keyCode ? e.keyCode : e.which;
@@ -684,7 +684,7 @@ var myconsole = {
 		// hide countdown and show delete button
 		setTimeout( function() {
 			log( 'Taking picture ...' );
-			
+
 			// picture is taken by backend via POST request
 			$.ajax({
 				type: 'POST',
@@ -769,7 +769,7 @@ var myconsole = {
 			start_date: start_date.getTime(),
 			end_date: user_data.end_date.getTime(),
 			receivers: user_data.receiver,
-			picture: user_data.picture_url 
+			picture: user_data.picture_url
 		}
 
 		log(data);
@@ -940,7 +940,7 @@ var myconsole = {
 		var prev_screen = root.prev(root.current())
 		root.goto( prev_screen, root.current() );
 	};
-	
+
 	/** Goes to next screen. */
 	root.goto_next = function() {
 		log('Going to next screen ...');
@@ -1072,12 +1072,12 @@ var myconsole = {
 		}
 
 		if ( !opts || !opts.initial ) {
-			root.blockUI();	
+			root.blockUI();
 		}
 
 		root.load_translation_map( l, {
 			success: function () {
-				locale = l;	
+				locale = l;
 				root.update_ui_messages();
 				$('a.lang').each( function () {
 					var l = $(this).attr('data-locale');
@@ -1195,7 +1195,7 @@ var myconsole = {
 			return false;
 		});
 
-		/** Take photo button displays countdown and takes picture. */ 
+		/** Take photo button displays countdown and takes picture. */
 		$('.screen-photo a.btn-snap').click( function() {
 			visys.trigger('snap');
 			return false;
@@ -1224,7 +1224,7 @@ var myconsole = {
 			$.ajax({
 				url: visys.conf.api_base_url + '/cam_movement.php',
 				type: 'POST',
-				data: { value: '0,100' },
+				data: { value: '5' },
 				success: function () {
 					log( 'Camera moved ...' );
 				},
@@ -1241,7 +1241,7 @@ var myconsole = {
 			$.ajax({
 				url: visys.conf.api_base_url + '/cam_movement.php',
 				type: 'POST',
-				data: { value: '0,-100' },
+				data: { value: '-5' },
 				success: function () {
 					log( 'Camera moved ...' );
 				},

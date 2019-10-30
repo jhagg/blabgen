@@ -3,15 +3,8 @@
 /**
  * Moves camera.
  *
- * Sends two commands to the PTZ URL of the camera:
+ * Sends a relative tilt command to the PTZ URL of the camera:
  *
- * 1. Move camera in desired direction.
- *
- * Followed immediately by a second command:
- *
- * 2. Stop movement.
- *  
- * Not a pretty solution. 
  */
 
 require __DIR__ . '/../bootstrap.php';
@@ -36,17 +29,9 @@ $cmd = '/usr/bin/curl -i -u %s:%s "%s"';
 
 $qry = http_build_query( array(
 	'camera' => 1,
-	'continuouspantiltmove' => $value,
+	'rtilt' => $value,
 ));
 $url = "$url?$qry";
 $cmd1 = sprintf( $cmd, conf('cam.username'), conf('cam.password'), $url );
 
-$qry = http_build_query( array(
-	'camera' => 1,
-	'continuouspantiltmove' => '0,0',
-));
-$url = "$url?$qry";
-$cmd2 = sprintf( $cmd, conf('cam.username'), conf('cam.password'), $url );
-
 system( $cmd1 );
-system( $cmd2 );
