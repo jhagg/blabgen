@@ -1224,7 +1224,7 @@ var myconsole = {
 			$.ajax({
 				url: visys.conf.api_base_url + '/cam_movement.php',
 				type: 'POST',
-				data: { value: '5' },
+				data: { value: '2' },
 				success: function () {
 					log( 'Camera moved ...' );
 				},
@@ -1241,7 +1241,7 @@ var myconsole = {
 			$.ajax({
 				url: visys.conf.api_base_url + '/cam_movement.php',
 				type: 'POST',
-				data: { value: '-5' },
+				data: { value: '-2' },
 				success: function () {
 					log( 'Camera moved ...' );
 				},
