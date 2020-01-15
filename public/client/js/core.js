@@ -1261,6 +1261,15 @@ var myconsole = {
 			clearTimeout( down_timer );
 		});
 
+		// There is a possibility that the mouseup event isn't fired
+		// therefore we also need to clear the timeout on mouseleave
+		$('#cam-up').mouseleave(function () {
+			clearTimeout(up_timer);
+		})
+		$('#cam-down').mouseleave(function () {
+			clearTimeout(down_timer);
+		})
+
 		visys.trigger('init');
 	});
 })( visys, myconsole.log, jQuery );
