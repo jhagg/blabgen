@@ -1,0 +1,26 @@
+#!/usr/bin/perl
+
+my $dir = '/home/blabgen/movies';
+opendir(DIR, $dir);
+my @arr = grep(/^\w/, readdir(DIR));
+closedir(DIR);
+
+my $n = rand(@arr);
+
+my $file = $dir.'/'.$arr[$n];
+
+my @cmd = qw(mpv
+	--really-quiet
+	--no-audio
+	--fs
+	--loop=inf
+	--no-stop-screensaver 
+);
+push(@cmd, '--wid='.$ARGV[0], $file);
+open(X, ">/tmp/sabv");
+print X "@arr\n\n";
+print X "@cmd\n";
+close(X);
+
+exec @cmd;
+

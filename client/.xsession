@@ -27,5 +27,9 @@ fluxbox&
 
 xscreensaver -nosplash&
 
-iceweasel `cat $urlfile`
+cd openkiosk
+./openkiosk
+#iceweasel `cat $urlfile`
 #iceweasel -safe-mode
+
+# ADMIN: Shift+F1 and admin password

@@ -9,23 +9,24 @@
     - lightdm
     - fluxbox
     - xserver-xorg
-#    - iceweasel
     - x11-xserver-utils
+    - mpv
   tags:
   - client
 
 - name: config lightdm
   lineinfile: dest=/etc/lightdm/lightdm.conf
-    insertafter='^\[SeatDefaults\]' line='{{item}}'
-  with_items:
+    insertafter='^\[Seat' line='{{item}}'
+  loop:
   - autologin-user=blabgen
   - autologin-user-timeout=5
   tags:
   - client
+  - client2
 
 - name: create dirs
   file: path={{item}} state=directory
-  with_items:
+  loop:
   - "{{user_dir}}/.fluxbox"
   - "{{user_dir}}/bin"
   - "{{user_dir}}/log"
@@ -35,14 +36,17 @@
 
 - name: copy user files
   copy: src=../{{item.src}} dest={{user_dir}}/{{item.dst}}
-  with_items:
+  loop:
   - src: client/.xsession
     dst: .xsession
   - src: client/.fluxbox/keys
     dst: .fluxbox/keys
+  - src: client/xs_movie
+    dst: bin/xs_movie
   tags:
   - client
 
+  #######################################################
 - name: setup server name
   template: src=url.j2 dest={{user_dir}}/url
   tags:
@@ -55,15 +59,16 @@
 
 - name: copy scripts
   template: src=../{{item}} dest={{user_dir}}/bin mode=0755
-  with_items:
+  loop:
   - check_kiosk
   - daily_adm
   tags:
   - client
 
+  #######################################################
 - name: start check daemon
   cron: job={{user_dir}}/bin/check_kiosk minute=*/10
-    name='blabgen kiosk watchdog'
+    name='blabgen kiosk watchdog' state=absent
   tags:
   - client
 

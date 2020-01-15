@@ -1,25 +1,25 @@
 ---
 - name: required packages
-  apt: name={{item}}
-  with_items:
-  - perl-modules
-  - libdbd-mysql-perl
-  - libmime-lite-perl
-  - libstring-random-perl
-  - curl
-  - cups-client
-  - imagemagick
-  - libapache2-mod-php7.0
-  - php7.0-mysql
-  - php7.0-imap
-  - php7.0-mbstring
-  - libimager-perl
-  - libconfig-inifiles-perl
-  - qrencode
-  - fonts-freefont-ttf
-  - libdate-calc-perl
-  - libjs-jquery
-  - rsyslog
+  apt:
+    name:
+    - perl
+    - libdbd-mysql-perl
+    - libmime-lite-perl
+    - libstring-random-perl
+    - curl
+    - cups-client
+    - imagemagick
+    - libapache2-mod-php7.0
+    - php-mysql
+    - php-imap
+    - php-mbstring
+    - libimager-perl
+    - libconfig-inifiles-perl
+    - qrencode
+    - fonts-freefont-ttf
+    - libdate-calc-perl
+    - libjs-jquery
+    - rsyslog
   tags:
   - install
 
