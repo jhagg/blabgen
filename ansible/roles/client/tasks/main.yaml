@@ -66,14 +66,21 @@
   - client
 
   #######################################################
-- name: start check daemon
+- name: remove check daemon
   cron: job={{user_dir}}/bin/check_kiosk minute=*/10
     name='blabgen kiosk watchdog' state=absent
   tags:
   - client
 
+- name: remove daily admin script
+  cron: job={{user_dir}}/bin/daily_adm hour=6 minute=5
+    name='blabgen kiosk admin' state=absent
+  tags:
+  - client
+
 - name: add daily admin script
   cron: job={{user_dir}}/bin/daily_adm hour=6 minute=5
+    cron_file=blabgen user=root
     name='blabgen kiosk admin'
   tags:
   - client
