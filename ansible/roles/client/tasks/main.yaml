@@ -41,10 +41,19 @@
     dst: .xsession
   - src: client/.fluxbox/keys
     dst: .fluxbox/keys
-  - src: client/xs_movie
-    dst: bin/xs_movie
   tags:
   - client
+
+- name: copy movie cmd
+  copy: src=../client/xs_movie dest={{user_dir}}/bin/xs_movie mode=0755
+  tags:
+  - client
+  - client3
+- name: movie dir
+  file: path={{user_dir}}/movies state=directory
+  tags:
+  - client
+  - client3
 
   #######################################################
 - name: setup server name

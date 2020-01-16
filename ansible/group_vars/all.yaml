@@ -1,5 +1,4 @@
 ---
-my_sudo_user: root
 
 # user directory
 user_dir: /home/blabgen
@@ -7,8 +6,6 @@ user_dir: /home/blabgen
 # for apache config & logs
 site_prefix: blabgen
 
-# fix for synchronize module
-sudo_opts: "sudo -u {{my_sudo_user}} rsync"
 
 # find the local git repos complete path
 local_repo_dir: "{{ lookup('pipe', 'git rev-parse --show-toplevel') }}"
@@ -34,5 +31,3 @@ document_root: "{{blabgen_dir}}/web"
 # remove admin dir, only on prod
 rm_admin_dir: 0
 
-# for hosts without root access, set this to 'sudo'
-sudo_cmd: ''
