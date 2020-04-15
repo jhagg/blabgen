@@ -158,6 +158,23 @@ if ($cgi->param('park')) {
 	print end_html(), "\n";
 	exit 0;
 }
+######################################################################
+
+if ($cgi->param('to_visit')) {
+	print start_table({-cellspacing => 0, -cellpadding => 0,
+		'class' => 'header_table', -width => '100%'}), "\n";
+	print Tr(
+		td({-align => 'left'}),
+		th({-class => 'header_title'},
+			"Host to visit $date_str")."\n",
+		td({-align => 'right'})), "\n";
+	print end_table(), "\n";
+
+	print to_visit_table($curr_id);
+
+	print end_html(), "\n";
+	exit 0;
+}
 
 ######################################################################
 print start_table({-cellspacing => 0, -cellpadding => 0,
@@ -189,7 +206,7 @@ sub button_row {
 			['Next day', gen_url('dday=1')],
 		],
 		[
-			[],
+			['To Visit', $cgi->url.'?to_visit=1', 1],
 			['Prev week', gen_url('dweek=-1')],
 			['Next week', gen_url('dweek=1')],
 		],
@@ -256,7 +273,7 @@ sub date_table {
 	# Choose the order of the table:
 	my @plh;
 	my $cmd = "select id, name, company, enter_time, leave_time, ".
-		"webkey, status, parking from pers ";
+		"webkey, status, parking, webhost from pers ";
 #	$cmd .= "join visit using(id) " if $search_user;
 	unless (defined $date[1]) {
 		$cmd .= "where enter_time between ? and ?";
@@ -286,8 +303,12 @@ sub date_table {
 		'',
 		a({-href => $myurl.'?sort=company'}, 'Company')."\n",
 		a({-href => $myurl.'?sort=leave_time'}, 'Leave')."\n",
-		'Parking', '&nbsp;']))."\n";
-	while (my ($id, $name, $comp, $enter, $leave, $wkey, $status, $parking)
+		a({-href => $myurl.'?sort=parking'}, 'Parking')."\n",
+		a({-href => $myurl.'?sort=webhost'}, 'Web Host')."\n", 
+		]))."\n";
+
+	
+	while (my ($id, $name, $comp, $enter, $leave, $wkey, $status, $parking, $webhost)
 			= $sth->fetchrow_array) {
 
 		my $date = substr($enter, 0, 10);
@@ -325,17 +346,18 @@ sub date_table {
 			td({-class => $class.' list_item_name'}, $name)."\n",
 			td({-class => $class}, $enter)."\n",
 			td({-class => $class}, $visit)."\n",
-			td({-rowspan => 2, -class =>
-				$class}, $pict_code)."\n"
+			td({-class => $class}, $pict_code)."\n"
 			)."\n";
 		my $class = 'list_item list_item2';
 		$class .= ' list_current_item' if $id == $curr_id;
+		my $webhost_name = webhost_code ($webhost);
 		$s .= Tr({-class => 'list_row2'},
 			td({-class => $class.' reprint'}, $reprint)."\n",
 			td({-class => $class}, $comp)."\n",
 			td({-class => $class}, $leave)."\n",
-			td({-class => $class}, $parking)."\n"
-			)."\n";
+			td({-class => $class}, $parking)."\n",
+			td({-class => $class}, $webhost_name)."\n"
+			 )."\n";
 	}
 	$s .= end_table();
 	$s;
@@ -432,6 +454,47 @@ sub emerg_table {
 	$s;
 }
 
+sub to_visit_table {
+
+	my$cnt = 0;
+	my $s;
+	my @date = Today();
+	# Choose the order of the table:
+	my @plh;
+	my $cmd = "select p.id, p.name, p.company, p.parking, i.name, i.surname from pers p , visit v, info i ".
+	"where date(enter_time) <= ? and date(leave_time) >= ? and p.status ='act' and  p.id = v.id".
+	" and i.uname = v.uname order by i.name, i.surname";
+	@plh = ($date_str, $date_str);
+	my $sth = $dbh->prepare($cmd);
+	$sth->execute(@plh);
+
+
+	$s .= start_table({-cellspacing => 0, -cellpadding => 0,
+		'class' => 'list_table'})."\n";
+
+
+	$s .= Tr({-class => 'list_hdr_row'}, th({-class => 'list_header'}, [
+		'Id', 'Name', 'Company','Parking','Host (to visit)'
+		]))."\n";
+	while (my ($id, $name, $company, $parking, $host_name, $host_surname) = $sth->fetchrow_array) {
+
+		#my $date = substr($enter, 0, 10);
+
+		my $class = 'list_item list_item1';
+		$class .= ' list_current_item' if $id == $curr_id;
+		$s .= Tr({-class => 'list_row'},
+			td({-class => $class.' list_item_name'}, $id)."\n",
+			td({-class => $class.' list_item_name'}, $name)."\n",
+			td({-class => $class.' list_item_name'}, $company)."\n",
+			td({-class => $class.' list_item_name'}, $parking)."\n",
+			td({-class => $class.' list_item_name'}, $host_name .' '. $host_surname )."\n",
+			)."\n";
+	}
+	$s .= end_table();
+	$s;
+
+}
+
 sub err {
 	print h1("Error: @_")."\n";
 	syslog('err', join(', ', @_));
@@ -447,4 +510,24 @@ sub cnf {
 	$v =~ s/^'(.*)'$/\1/;
 	print "$id = '$v'\n" if $verbose;
 	$v;
+}
+
+sub webhost_code {
+	my $ip = shift;
+	my $webhost="";
+
+	if($ip eq "172.25.94.10"){
+
+		$webhost = "H Building - right " ;
+	}
+	elsif($ip eq "172.25.94.11"){
+
+		$webhost = "H Building - left " ;
+	}
+	elsif($ip eq "172.25.94.12"){
+
+		$webhost = "S Building" ;
+	}
+	$webhost;
+
 }
