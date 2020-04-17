@@ -122,3 +122,5 @@ msgstr "Ajdå."
 msgid "An error has occured. The system needs to be restarted. Please contact the reception desk."
 msgstr "Ett fel har inträffat. Systemet måste startas om. Var vänlig kontakta receptionen."
 
+msgid "Information about Axis' processing of your personal data"
+msgstr "Information om Axis behandling av dina personuppgifter"

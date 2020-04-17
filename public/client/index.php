@@ -63,7 +63,7 @@ screen-receiver input {
 	</style>
 </head>
 <body>
-	
+
 <div id="doc">
 	<header>
 		<div class="branding">
@@ -90,6 +90,13 @@ screen-receiver input {
 					Axis Communications
 				</span>
 			</h1>
+			
+			<a href="#" id="btnPolicy" class="translatable">Information about Axis' processing of your personal data</a>
+				<div id="dialog_policy" style="display: none;">
+    				<div>
+        				<iframe id="frame"></iframe>
+    				</div>
+				</div>
 
 			<p class="btn-start">
 				<a href="" class="btn important btn-start translatable">Register</a>
@@ -387,6 +394,19 @@ endif;
 <script src="js/jquery.blockUI-2.66.0.js"></script>
 
 <script src="select2/select2.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#btnPolicy').click(function() {
+			$("#dialog_policy").dialog({
+    			position: {
+        			my: "center",  at: "left", of: $("body"),within: $("body")
+    			}
+			});
+            $("#frame").attr("src", "Privacy_notice_visitors_25032020.htm");
+            $("#frame").attr('style', 'width:1020px; height:668px; allowtransparency:false; background-color: #FFFFFF;');
+        }); 
+    });
+</script>
 <!-- script src="select2/select2_locale_sv.js"></script --!>
 <script src="js/select_config.js"></script>
 
