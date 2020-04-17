@@ -90,17 +90,18 @@ screen-receiver input {
 					Axis Communications
 				</span>
 			</h1>
-			
-			<a href="#" id="btnPolicy" class="translatable">Information about Axis' processing of your personal data</a>
-				<div id="dialog_policy" style="display: none;">
-    				<div>
-        				<iframe id="frame"></iframe>
-    				</div>
-				</div>
 
 			<p class="btn-start">
 				<a href="" class="btn important btn-start translatable">Register</a>
 			</p>
+
+			<a href="#" id="btnPolicy" class="translatable">Information about Axis' processing of your personal data</a>
+
+			<div id="dialog_policy" style="display: none;">
+    			<div>
+        			<iframe id="frame"></iframe>
+    			</div>
+			</div>
 		</section>
 		<!-- / start screen -->
 
