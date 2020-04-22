@@ -51,9 +51,6 @@ if (my $diff_day = $cgi->param('dday')) {
 if (my $diff_week = $cgi->param('dweek')) {
 	@show_date = Add_Delta_Days(@show_date, $diff_week*7);
 }
-if (my $diff_month = $cgi->param('dmonth')) {
-	@show_date = Add_Delta_YM(@show_date, 0, $diff_month);
-}
 if ($cgi->param('year')) {
 	@show_date = ($show_date[0], undef, undef);
 }
@@ -209,11 +206,6 @@ sub button_row {
 			['To Visit', $cgi->url.'?to_visit=1', 1],
 			['Prev week', gen_url('dweek=-1')],
 			['Next week', gen_url('dweek=1')],
-		],
-		[
-			[],
-			['Prev month', gen_url('dmonth=-1')],
-			['Next month', gen_url('dmonth=1')],
 		],
 	);
 
