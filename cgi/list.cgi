@@ -518,7 +518,7 @@ sub webhost_code {
 	}
 	elsif($ip eq "172.25.94.12"){
 
-		$webhost = "S Building" ;
+		$webhost = "T Building" ;
 	}
 	$webhost;
 
