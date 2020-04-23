@@ -11,6 +11,7 @@ use POSIX;
 use CGI qw(-nosticky :standard start_table);
 use CGI::Carp;
 use Sys::Syslog;
+use Socket;
 
 my $config = $ENV{'BLABGEN_ETC'}.'/config.ini';
 $config = '../conf/config.ini' if -r '../conf/config.ini'; # for debug
@@ -508,15 +509,15 @@ sub webhost_code {
 	my $ip = shift;
 	my $webhost="";
 
-	if($ip eq "172.25.94.10"){
+	if($ip eq inet_ntoa((gethostbyname(cnf('clients.kaos')))[4])){
 
 		$webhost = "H Building - right " ;
 	}
-	elsif($ip eq "172.25.94.11"){
+	elsif($ip eq inet_ntoa((gethostbyname(cnf('clients.soak')))[4])){
 
 		$webhost = "H Building - left " ;
 	}
-	elsif($ip eq "172.25.94.12"){
+	elsif($ip eq inet_ntoa((gethostbyname(cnf('clients.ronnie')))[4])){
 
 		$webhost = "T Building" ;
 	}
