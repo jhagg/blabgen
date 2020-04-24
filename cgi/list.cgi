@@ -61,7 +61,9 @@ my @keep_args = qw(
 	date
 	sort
 );
-
+my $h_building_r = inet_ntoa((gethostbyname(cnf('clients.h_building_r')))[4]);
+my $h_building_l = inet_ntoa((gethostbyname(cnf('clients.h_building_l')))[4]);
+my $t_building = inet_ntoa((gethostbyname(cnf('clients.t_building')))[4]);
 ######################################################################
 # Check the input parameters and act the right way:
 my $dsn = 'DBI:mysql:database='.cnf('db.db').';host='.cnf('db.host').
@@ -509,15 +511,15 @@ sub webhost_code {
 	my $ip = shift;
 	my $webhost="";
 
-	if($ip eq inet_ntoa((gethostbyname(cnf('clients.kaos')))[4])){
+	if($ip eq $h_building_r){
 
 		$webhost = "H Building - right " ;
 	}
-	elsif($ip eq inet_ntoa((gethostbyname(cnf('clients.soak')))[4])){
+	elsif($ip eq $h_building_l){
 
 		$webhost = "H Building - left " ;
 	}
-	elsif($ip eq inet_ntoa((gethostbyname(cnf('clients.ronnie')))[4])){
+	elsif($ip eq $t_building){
 
 		$webhost = "T Building" ;
 	}
