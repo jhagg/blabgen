@@ -510,7 +510,7 @@ sub webhost_code {
 	my @parms = $config_obj->Parameters('clients');
 	foreach (@parms) {
 		my $packip = gethostbyname($_);
-		die "unknown name:$!" unless $packip;
+		err("unknown name:$!") unless $packip;
 		my $ip_addr = inet_ntoa($packip);
 		if($ip eq $ip_addr){
 			$webhost = $config_obj->val('clients',$_);
