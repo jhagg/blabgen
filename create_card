@@ -33,6 +33,7 @@ if (-r $local_conf) {
 }
 openlog('blabgen_create_card', undef, main_cnf('gen.syslog_facility'));
 
+my $output_suffix = cnf('temp.out_suffix');
 GetOptions('v+' => \$verbose, 'd+' => \$debug,
 	'pict=s'	=> \$pict_file,
 	'name:s'	=> \$name,
@@ -41,6 +42,7 @@ GetOptions('v+' => \$verbose, 'd+' => \$debug,
 	'date=s'	=> \$date,
 	'printer=s'	=> \$pr_queue,
 	'show'		=> \$show_pict,
+	'suffix=s'	=> \$output_suffix,
 	'o=s'		=> \$output_file);
 
 $name = decode('UTF-8', $name);
@@ -190,7 +192,7 @@ syslog('debug', "outfile %s", $output_file);
 
 my $ps_obj = new File::Temp(DIR => cnf('temp.dir'),
 	UNLINK => $unlink,
-	TEMPLATE => cnf('temp.ps_template'), SUFFIX => '.ps');
+	TEMPLATE => cnf('temp.ps_template'), SUFFIX => $output_suffix);
 my $ps_file = $ps_obj->filename;
 $ps_file = cnf('debug.ps_file') if $debug;
 
@@ -201,7 +203,8 @@ if (cnf('debug.a4')) {
 }
 else {
 	syslog('debug', "convert %s %s", $output_file, $ps_file);
-	do_system("convert $output_file $ps_file");
+	my $cnv_cmd = $output_suffix != '.jpeg' ? 'convert' : 'cp';
+	do_system("$cnv_cmd $output_file $ps_file");
 }
 if ($pr_queue && !$debug) {
 	syslog('debug', "print to %s, file %s", $pr_queue, $ps_file);
