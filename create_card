@@ -203,7 +203,7 @@ if (cnf('debug.a4')) {
 }
 else {
 	syslog('debug', "convert %s %s", $output_file, $ps_file);
-	my $cnv_cmd = $output_suffix != '.jpeg' ? 'convert' : 'cp';
+	my $cnv_cmd = $output_suffix ne cnf('temp.suffix') ? 'convert' : 'cp';
 	do_system("$cnv_cmd $output_file $ps_file");
 }
 if ($pr_queue && !$debug) {
