@@ -8,7 +8,7 @@ require __DIR__ . '/../../bootstrap.php';
 
 function uploadImage() {
 
-  log_msg('LOG_DEBUG', 'uploadImage begins');
+  log_msg(LOG_DEBUG, 'uploadImage begins');
   $picture_dir = conf('picture.tmp_dir');
   $targetFile = conf('picture.tmp_url_template');
   $imageFile = $_FILES["image"];
@@ -32,22 +32,22 @@ function uploadImage() {
     // Generate random name for image
     $imageName = md5(microtime() . '.' .  mt_rand()) . '.jpg';
     $imagePath = $picture_dir . $imageName;
-    log_msg('LOG_DEBUG', "imageName: $imageName; imagePath: $imagePath");
+    log_msg(LOG_DEBUG, "imageName: $imageName; imagePath: $imagePath");
     if (move_uploaded_file($imageFile["tmp_name"], $imagePath)) {
       $data = array();
       $data["imageUrl"] = sprintf($targetFile, $imageName);
-      log_msg('LOG_DEBUG', 'uploaded image moved');
+      log_msg(LOG_DEBUG, 'uploaded image moved');
       http_response_code(201);
       header('Location: ' . $data["imageUrl"]);
       echo json_encode($data);
     }
     else {
-      log_msg('LOG_DEBUG', 'Could not move uploaded image');
+      log_msg(LOG_DEBUG, 'Could not move uploaded image');
       // Could not move uploaded image
       http_response_code(500);
     }
   }
-  log_msg('LOG_DEBUG', 'uploadImage ends');
+  log_msg(LOG_DEBUG, 'uploadImage ends');
 }
 
 try {
