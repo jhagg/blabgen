@@ -47,13 +47,15 @@ function conf($conf) {
 		$hn = get_remote_hostname();
 		$config = $etc_dir.'/host-'.$hn.'.ini';
 		$dev_config = __DIR__.'/../conf/host-'.$hn.'.ini';
-		if (is_readable($dev_config)) {
-			$config = $dev_config;
-		}
-		$opts_tmp = parse_ini_file($config, 1);
-		$debug[] .= sprintf("Read host config from '%s'", $config);
-		$opts = array_replace_recursive($opts, $opts_tmp);
-
+		// in case there is a config file for the remote host
+		if (is_readable($config)){
+            if (is_readable($dev_config)) {
+                $config = $dev_config;
+            }
+            $opts_tmp = parse_ini_file($config, 1);
+            $debug[] .= sprintf("Read host config from '%s'", $config);
+            $opts = array_replace_recursive($opts, $opts_tmp);
+        }
 		$facil = 'LOG_'.strtoupper($opts['gen']['syslog_facility']);
 		eval('$facil = '.$facil.';');
 		openlog($script, 0, $facil);

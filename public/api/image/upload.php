@@ -7,7 +7,9 @@
 require __DIR__ . '/../../bootstrap.php';
 
 function uploadImage() {
-  $picture_dir = conf('picture.dir');
+
+  log_msg('', 'uploadImage begins');
+  $picture_dir = conf('picture.tmp_dir');
   $targetFile = conf('picture.tmp_url_template');
   $imageFile = $_FILES["image"];
   $isImage = getimagesize($imageFile["tmp_name"]);
@@ -17,10 +19,12 @@ function uploadImage() {
   }
 
   if (!$imageFile) {
+    log_msg('', 'No image file');
     http_response_code(400);
     echo json_encode(array("message" => "No image file"));
   }
   else if (!$isImage) {
+    log_msg('', 'Incorrect file format');
     http_response_code(400);
     echo json_encode(array("message" => "Incorrect file format"));
   }
@@ -28,19 +32,22 @@ function uploadImage() {
     // Generate random name for image
     $imageName = md5(microtime() . '.' .  mt_rand()) . '.jpg';
     $imagePath = $picture_dir . $imageName;
+    log_msg('', "imageName: $imageName; imagePath: $imagePath");
     if (move_uploaded_file($imageFile["tmp_name"], $imagePath)) {
       $data = array();
       $data["imageUrl"] = sprintf($targetFile, $imageName);
-
+      log_msg('', 'uploaded image moved');
       http_response_code(201);
       header('Location: ' . $data["imageUrl"]);
       echo json_encode($data);
     }
     else {
+      log_msg('', 'Could not move uploaded image');
       // Could not move uploaded image
       http_response_code(500);
     }
   }
+  log_msg('', 'uploadImage ends');
 }
 
 try {
