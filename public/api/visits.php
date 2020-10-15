@@ -266,7 +266,8 @@ function send_visitor_email($visit_data, $receivers ) {
 	$msg = 'You have a visitor: '.$visit_data['name'];
 	if ($visit_data['company'])
 		$msg .= ' from '.$visit_data['company'];
-
+    $reg_building = webhost_code($visit_data['webhost']);
+    $msg .= sprintf("\n\n%s", 'Registered in '.$reg_building);
 	$msg .= sprintf("\n\n%s", $picture_url);
 
 	if (conf('email.send')) {
@@ -310,7 +311,23 @@ function print_visitor_badge($visit_data ) {
 	log_msg(LOG_DEBUG, "Print: $cmd");
 	exec_cmd($cmd);
 }
-
+/** get the building for registration*/
+function webhost_code ($ip) {
+    $webhost="";
+    $clients = conf('clients');
+    foreach ($clients as $host=> $building) {
+        $ip_addr = gethostbyname($host);
+        if(! $ip_addr) {
+            log_msg(LOG_DEBUG, "No ip is found for $host");
+        }
+        $ip_addr_ = inet_ntop($ip_addr);
+        if($ip == $ip_addr_) {
+            $webhost = $building;
+            break;
+        }
+    }
+    return $webhost;
+}
 try {
 	if (request_method() != 'post' ) {
 		throw new Http_error(405, 'Only POST allowed.');

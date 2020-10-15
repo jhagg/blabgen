@@ -70,11 +70,16 @@ function conf($conf) {
 	if (!array_key_exists($sec, $opts)) {
 		throw new Http_error( 500, "section $sec in $conf missing");
 	}
-	if (!array_key_exists($key, $opts[$sec])) {
-		throw new Http_error( 500, "Key $conf missing");
-	}
-
-	return @$opts[$sec][$key];
+    //no keys for clients section
+    if ($conf == 'clients') {
+        return @$opts[$sec];
+    }
+    else {
+        if (!array_key_exists($key, $opts[$sec])) {
+            throw new Http_error( 500, "Key $conf missing");
+        }
+        return @$opts[$sec][$key];
+    }
 }
 
 /**
