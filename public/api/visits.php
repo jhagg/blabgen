@@ -321,7 +321,7 @@ function webhost_code ($ip) {
             log_msg(LOG_DEBUG, "No ip is found for $host");
         }
         if($ip == $ip_addr) {
-            $webhost = $building;
+            $webhost = explode("-", $building)[0];
             break;
         }
     }
