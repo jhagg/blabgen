@@ -320,8 +320,7 @@ function webhost_code ($ip) {
         if(! $ip_addr) {
             log_msg(LOG_DEBUG, "No ip is found for $host");
         }
-        $ip_addr_ = inet_ntop($ip_addr);
-        if($ip == $ip_addr_) {
+        if($ip == $ip_addr) {
             $webhost = $building;
             break;
         }
