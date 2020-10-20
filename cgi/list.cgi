@@ -84,7 +84,7 @@ if (my $id = $cgi->param('goto_id')) {
 }
 if ($cgi->param('find')) {
 	$curr_id = $cgi->param('curr_id');
-	if (my ($id) = $curr_id =~ /^lv(\d+)/) {
+	if (my ($id) = $curr_id =~ /^(?:X|lv)(\d+)/) {
 		push(@leave, $id);
 		$curr_id = $id;
 		$cgi->param('curr_id', '');
