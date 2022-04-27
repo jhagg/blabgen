@@ -1,0 +1,18 @@
+
+# servers
+servers:
+  hosts:
+    servername:
+
+# clients
+clients:
+  hosts:
+    devclient1:
+    devclient2:
+    devclient3:
+
+# prod hosts, only for prod install
+prodhosts:
+  children:
+    servers:
+    clients:

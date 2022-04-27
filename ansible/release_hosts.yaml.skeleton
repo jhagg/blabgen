@@ -1,0 +1,13 @@
+servers:
+  hosts:
+    server1:
+
+clients:
+  hosts:
+    client1:
+    client2:
+
+prodhosts:
+  children:
+    servers:
+    clients:

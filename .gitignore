@@ -16,6 +16,6 @@
 /conf/host-*.ini
 !/conf/host-example.ini
 
-/ansible/hosts
-/ansible/.release_hosts
+/ansible/hosts.yaml
+/ansible/release_hosts.yaml
 /junk
