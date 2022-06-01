@@ -1,3 +1,9 @@
+blabgen (4.1-1) unstable; urgency=medium
+
+  * added curl-options for cameras with special features 
+
+ -- Jörgen Hägg <jh@axis.com>  Wed, 01 Jun 2022 09:58:22 +0200
+
 blabgen (4.0-1) unstable; urgency=medium
 
   * new release
