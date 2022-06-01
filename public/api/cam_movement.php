@@ -27,7 +27,7 @@ $value = $_POST['value'];
 // use curl for http request
 $cmd = '/usr/bin/curl ';
 if (conf('cam.options')) {
-	$curl_download_cmd .= conf('cam.options').' ';
+	$cmd .= conf('cam.options').' ';
 }
 $cmd .= '-i -u %s:%s "%s"';
 
@@ -38,4 +38,5 @@ $qry = http_build_query( array(
 $url = "$url?$qry";
 $cmd1 = sprintf( $cmd, conf('cam.username'), conf('cam.password'), $url );
 
+syslog(LOG_INFO, $cmd1);
 system( $cmd1 );
