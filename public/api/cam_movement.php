@@ -25,7 +25,11 @@ if ( empty( $_POST['value'] ) ) {
 $value = $_POST['value'];
 
 // use curl for http request
-$cmd = '/usr/bin/curl -i -u %s:%s "%s"';
+$cmd = '/usr/bin/curl ';
+if (conf('cam.options')) {
+	$curl_download_cmd .= conf('cam.options').' ';
+}
+$cmd .= '-i -u %s:%s "%s"';
 
 $qry = http_build_query( array(
 	'camera' => 1,
