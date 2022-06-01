@@ -18,6 +18,9 @@ function take_picture() {
 			conf('cam.username').':'.
 			conf('cam.password').'" ';
 	}
+	if (conf('cam.options')) {
+		$curl_download_cmd .= conf('cam.options').' ';
+	}
 	$curl_download_cmd .= '"%s" > "%s"';
  
 	$max_tries = 10;
