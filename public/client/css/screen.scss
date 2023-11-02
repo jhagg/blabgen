@@ -607,6 +607,12 @@ p.countdown {
 	font-size: 32px;
 	padding: 10px 16px 10px 16px;
 	font-weight: normal;
+	color: #1F1F1F;
+}
+
+.cam-ctrl .btn-arrow:hover {
+	color: #000;
+	transform: scale(1.1);
 }
 
 /* countdown timer and delete picture button */
